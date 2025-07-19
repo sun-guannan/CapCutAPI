@@ -6,6 +6,7 @@ from copy import deepcopy
 from typing import Optional, Literal, Union, overload
 from typing import Type, Dict, List, Any
 
+
 from pyJianYingDraft.metadata.font_meta import Font_type
 
 from . import util
@@ -21,7 +22,7 @@ from .text_segment import Text_segment, Text_style, TextBubble, Text_border, Tex
 from .track import Track_type, Base_track, Track
 
 from settings.local import IS_CAPCUT_ENV
-from .metadata import Video_scene_effect_type, Video_character_effect_type, Filter_type
+from .metadata import Video_scene_effect_type, Video_character_effect_type, Filter_type, Font_type
 
 class Script_material:
     """草稿文件中的素材信息部分"""
