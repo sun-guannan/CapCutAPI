@@ -6,7 +6,7 @@ from copy import deepcopy
 from typing import Optional, Literal, Union, overload
 from typing import Type, Dict, List, Any
 
-from core.capcut_api.pyJianYingDraft.metadata.font_meta import Font_type
+from pyJianYingDraft.metadata.font_meta import Font_type
 
 from . import util
 from . import exceptions
