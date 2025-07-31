@@ -6,7 +6,8 @@ import os
 import hashlib
 import functools
 import time
-from settings.local import DRAFT_DOMAIN, PREVIEW_ROUTER
+from settings.local import DRAFT_DOMAIN, PREVIEW_ROUTER, DRAFT_SAVE_PATH
+
 
 def hex_to_rgb(hex_color: str) -> tuple:
     """Convert hexadecimal color code to RGB tuple (range 0.0-1.0)"""
@@ -29,7 +30,10 @@ def is_windows_path(path):
 
 
 def zip_draft(draft_id):
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+    if DRAFT_SAVE_PATH:
+        current_dir = DRAFT_SAVE_PATH
+    else:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
     # Compress folder
     zip_dir = os.path.join(current_dir, "tmp/zip")
     os.makedirs(zip_dir, exist_ok=True)

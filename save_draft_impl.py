@@ -20,7 +20,7 @@ import time
 import requests # Import requests for making HTTP calls
 import logging
 # Import configuration
-from settings import IS_CAPCUT_ENV, IS_UPLOAD_DRAFT
+from settings import IS_CAPCUT_ENV, IS_UPLOAD_DRAFT, DRAFT_SAVE_PATH, IS_COMPRESS
 
 # --- Get your Logger instance ---
 # The name here must match the logger name you configured in app.py
@@ -89,8 +89,13 @@ def save_draft_background(draft_id, draft_folder, task_id):
 
         logger.info(f"Starting to save draft: {draft_id}")
         # Save draft
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        draft_folder_for_duplicate = draft.Draft_folder(current_dir)
+        if DRAFT_SAVE_PATH:
+            current_dir = DRAFT_SAVE_PATH
+        else:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+        template_path = os.path.dirname(os.path.abspath(__file__))
+
+        draft_folder_for_duplicate = draft.Draft_folder(current_dir, template_path)
         # Choose different template directory based on configuration
         template_dir = "template" if IS_CAPCUT_ENV else "template_jianying"
         draft_folder_for_duplicate.duplicate_as_template(template_dir, draft_id)
@@ -215,6 +220,11 @@ def save_draft_background(draft_id, draft_folder, task_id):
         script.dump(os.path.join(current_dir, f"{draft_id}/draft_info.json"))
         logger.info(f"Draft information has been saved to {os.path.join(current_dir, draft_id)}/draft_info.json.")
 
+        zip_path = ""
+        if IS_COMPRESS:
+            zip_path = zip_draft(draft_id)
+            logger.info(f"Draft directory {os.path.join(current_dir, draft_id)} has been compressed to {zip_path}.")
+
         draft_url = ""
         # Only upload draft information when IS_UPLOAD_DRAFT is True
         if IS_UPLOAD_DRAFT:
@@ -248,7 +258,7 @@ def save_draft_background(draft_id, draft_folder, task_id):
         update_task_field(task_id, "progress", 100)
         update_task_field(task_id, "message", "Draft creation completed")
         logger.info(f"Task {task_id} completed, draft URL: {draft_url}")
-        return draft_url
+        return draft_url, zip_path
 
     except Exception as e:
         # Update task status - Failed
@@ -269,11 +279,13 @@ def save_draft_impl(draft_id: str, draft_folder: str = None) -> Dict[str, str]:
         task_id = draft_id
         create_task(task_id)
         logger.info(f"Task {task_id} has been created.")
-        
+
+        draft_url, zip_path =save_draft_background(draft_id, draft_folder, task_id)
         # Changed to synchronous execution
         return {
             "success": True,
-            "draft_url": save_draft_background(draft_id, draft_folder, task_id)
+            "draft_url": draft_url,
+            "draft_zip_path":zip_path
             }
 
         # # Start a background thread to execute the task

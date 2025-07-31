@@ -11,18 +11,20 @@ class Draft_folder:
     """管理一个文件夹及其内的一系列草稿"""
 
     folder_path: str
+    template_path: str
     """根路径"""
 
-    def __init__(self, folder_path: str):
+    def __init__(self, folder_path: str, template_path:str):
         """初始化草稿文件夹管理器
 
         Args:
             folder_path (`str`): 包含若干草稿的文件夹, 一般取剪映保存草稿的位置即可
-
+            template_path (`str`): 模板目录
         Raises:
             `FileNotFoundError`: 路径不存在
         """
         self.folder_path = folder_path
+        self.template_path = template_path
 
         if not os.path.exists(self.folder_path):
             raise FileNotFoundError(f"根文件夹 {self.folder_path} 不存在")
@@ -98,7 +100,7 @@ class Draft_folder:
             `FileNotFoundError`: 原始草稿不存在
             `FileExistsError`: 已存在与`new_draft_name`重名的草稿, 但不允许覆盖.
         """
-        template_path = os.path.join(self.folder_path, template_name)
+        template_path = os.path.join( self.template_path, template_name)
         new_draft_path = os.path.join(self.folder_path, new_draft_name)
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"模板草稿 {template_name} 不存在")
