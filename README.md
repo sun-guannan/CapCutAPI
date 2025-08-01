@@ -2,7 +2,17 @@
 
 Open source CapCut API tool.
 
+Try It: https://www.capcutapi.top
+
 [中文说明](https://github.com/sun-guannan/CapCutAPI/blob/main/README-zh.md)
+
+## Gallery
+
+**Connect AI generated via CapCutAPI**
+
+[![Horse](https://img.youtube.com/vi/IF1RDFGOtEU/hqdefault.jpg)](https://www.youtube.com/watch?v=IF1RDFGOtEU)
+
+[![Song](https://img.youtube.com/vi/rGNLE_slAJ8/hqdefault.jpg)](https://www.youtube.com/watch?v=rGNLE_slAJ8)
 
 ## Project Features
 

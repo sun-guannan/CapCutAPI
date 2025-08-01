@@ -2,6 +2,15 @@
 
 轻量、灵活、易上手的剪映/CapCutAPI工具，构建全自动化视频剪辑/混剪流水线。
 
+直接体验：https://www.capcutapi.top
+
+## 效果演示
+**通过工具，将AI生成的图片，视频组合起来**
+
+[![Horse](https://img.youtube.com/vi/IF1RDFGOtEU/hqdefault.jpg)](https://www.youtube.com/watch?v=IF1RDFGOtEU)
+
+[![Song](https://img.youtube.com/vi/rGNLE_slAJ8/hqdefault.jpg)](https://www.youtube.com/watch?v=rGNLE_slAJ8)
+
 ## 项目功能
 
 本项目是一个基于Python的剪映/CapCut处理工具，提供以下核心功能：

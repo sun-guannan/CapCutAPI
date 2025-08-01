@@ -60,6 +60,14 @@ if os.path.exists(CONFIG_FILE_PATH):
             if "mp4_oss_config" in local_config:
                 MP4_OSS_CONFIG = local_config["mp4_oss_config"]
 
+            # 更新自定义保存目录
+            if "draft_save_path" in local_config:
+                DRAFT_SAVE_PATH = local_config["draft_save_path"]
+
+            # 更新是否压缩
+            if "is_compress" in local_config:
+                IS_COMPRESS = local_config["is_compress"]
+
     except (json.JSONDecodeError, IOError):
         # 配置文件加载失败，使用默认配置
         pass

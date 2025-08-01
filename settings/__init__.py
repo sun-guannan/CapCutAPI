@@ -10,7 +10,9 @@ __all__ = [
     "API_KEYS",
     "MODEL_CONFIG",
     "PURCHASE_LINKS",
-    "LICENSE_CONFIG"
+    "LICENSE_CONFIG",
+    "DRAFT_SAVE_PATH",
+    "IS_COMPRESS"
 ]
 
 # 提供一个获取平台信息的辅助函数
