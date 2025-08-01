@@ -95,10 +95,10 @@ def save_draft_background(draft_id, draft_folder, task_id):
             current_dir = os.path.dirname(os.path.abspath(__file__))
         template_path = os.path.dirname(os.path.abspath(__file__))
 
-        draft_folder_for_duplicate = draft.Draft_folder(current_dir, template_path)
+        draft_folder_for_duplicate = draft.Draft_folder(current_dir)
         # Choose different template directory based on configuration
-        template_dir = "template" if IS_CAPCUT_ENV else "template_jianying"
-        draft_folder_for_duplicate.duplicate_as_template(template_dir, draft_id)
+        template_name = "template" if IS_CAPCUT_ENV else "template_jianying"
+        draft_folder_for_duplicate.duplicate_as_template(template_path, template_name, draft_id)
         
         # Update task status
         update_task_field(task_id, "message", "Updating media file metadata")

@@ -11,20 +11,17 @@ class Draft_folder:
     """管理一个文件夹及其内的一系列草稿"""
 
     folder_path: str
-    template_path: str
     """根路径"""
 
-    def __init__(self, folder_path: str, template_path:str):
+    def __init__(self, folder_path: str):
         """初始化草稿文件夹管理器
 
         Args:
             folder_path (`str`): 包含若干草稿的文件夹, 一般取剪映保存草稿的位置即可
-            template_path (`str`): 模板目录
         Raises:
             `FileNotFoundError`: 路径不存在
         """
         self.folder_path = folder_path
-        self.template_path = template_path
 
         if not os.path.exists(self.folder_path):
             raise FileNotFoundError(f"根文件夹 {self.folder_path} 不存在")
@@ -85,10 +82,11 @@ class Draft_folder:
 
         return Script_file.load_template(os.path.join(draft_path, "draft_info.json"))
 
-    def duplicate_as_template(self, template_name: str, new_draft_name: str, allow_replace: bool = False) -> Script_file:
+    def duplicate_as_template(self,template_dir:str, template_name: str, new_draft_name: str, allow_replace: bool = False) -> Script_file:
         """复制一份给定的草稿, 并在复制出的新草稿上进行编辑
 
         Args:
+            template_dir (`str`): 原草稿路径
             template_name (`str`): 原草稿名称
             new_draft_name (`str`): 新草稿名称
             allow_replace (`bool`, optional): 是否允许覆盖与`new_draft_name`重名的草稿. 默认为否.
@@ -100,7 +98,7 @@ class Draft_folder:
             `FileNotFoundError`: 原始草稿不存在
             `FileExistsError`: 已存在与`new_draft_name`重名的草稿, 但不允许覆盖.
         """
-        template_path = os.path.join( self.template_path, template_name)
+        template_path = os.path.join(template_dir, template_name)
         new_draft_path = os.path.join(self.folder_path, new_draft_name)
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"模板草稿 {template_name} 不存在")
