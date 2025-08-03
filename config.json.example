@@ -4,6 +4,8 @@
   "port": 9001,
   "preview_router": "/draft/downloader",
   "is_upload_draft": false,
+  "draft_save_path": "your-customize-the-draft-storage-path",
+  "is_compress": false,
   "oss_config": {
     "bucket_name": "your-bucket-name",
     "access_key_id": "your-access-key-id",
