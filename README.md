@@ -1,3 +1,5 @@
+[![MSeeP.ai Security Assessment Badge](https://mseep.net/pr/sun-guannan-capcutapi-badge.png)](https://mseep.ai/app/sun-guannan-capcutapi)
+
 # Connect AI generates via CapCutAPI [Try it online](https://www.capcutapi.top)
 
 ## Project Overview
