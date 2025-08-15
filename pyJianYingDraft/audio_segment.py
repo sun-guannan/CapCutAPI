@@ -9,15 +9,15 @@ from copy import deepcopy
 from typing import Optional, Literal, Union
 from typing import Dict, List, Any
 
-from pyJianYingDraft.metadata.capcut_audio_effect_meta import CapCut_Speech_to_song_effect_type, CapCut_Voice_characters_effect_type, CapCut_Voice_filters_effect_type
+from pyJianYingDraft.metadata.capcut_audio_effect_meta import CapCutSpeechToSongEffectType, CapCutVoiceCharactersEffectType, CapCutVoiceFiltersEffectType
 
 from .time_util import tim, Timerange
 from .segment import Media_segment
 from .local_materials import Audio_material
 from .keyframe import Keyframe_property, Keyframe_list
 
-from .metadata import Effect_param_instance
-from .metadata import Audio_scene_effect_type, Tone_effect_type, Speech_to_song_type
+from .metadata import EffectParamInstance
+from .metadata import AudioSceneEffectType, ToneEffectType, SpeechToSongType
 
 class Audio_fade:
     """音频淡入淡出效果"""
@@ -59,9 +59,9 @@ class Audio_effect:
     category_id: Literal["sound_effect", "tone", "speech_to_song"]
     category_name: Literal["场景音", "音色", "声音成曲"]
 
-    audio_adjust_params: List[Effect_param_instance]
+    audio_adjust_params: List[EffectParamInstance]
 
-    def __init__(self, effect_meta: Union[Audio_scene_effect_type, Tone_effect_type, Speech_to_song_type, CapCut_Voice_filters_effect_type, CapCut_Voice_characters_effect_type, CapCut_Speech_to_song_effect_type],
+    def __init__(self, effect_meta: Union[AudioSceneEffectType, ToneEffectType, SpeechToSongType, CapCutVoiceFiltersEffectType, CapCutVoiceCharactersEffectType, CapCutSpeechToSongEffectType],
                  params: Optional[List[Optional[float]]] = None):
         """根据给定的音效元数据及参数列表构造一个音频特效对象, params的范围是0~100"""
 
@@ -70,22 +70,22 @@ class Audio_effect:
         self.resource_id = effect_meta.value.resource_id
         self.audio_adjust_params = []
 
-        if isinstance(effect_meta, Audio_scene_effect_type):
+        if isinstance(effect_meta, AudioSceneEffectType):
             self.category_id = "sound_effect"
             self.category_name = "场景音"
-        elif isinstance(effect_meta, Tone_effect_type):
+        elif isinstance(effect_meta, ToneEffectType):
             self.category_id = "tone"
             self.category_name = "音色"
-        elif isinstance(effect_meta, Speech_to_song_type):
+        elif isinstance(effect_meta, SpeechToSongType):
             self.category_id = "speech_to_song"
             self.category_name = "声音成曲"
-        elif isinstance(effect_meta, CapCut_Voice_filters_effect_type):
+        elif isinstance(effect_meta, CapCutVoiceFiltersEffectType):
             self.category_id = "sound_effect"
             self.category_name = "Voice filters"
-        elif isinstance(effect_meta, CapCut_Voice_characters_effect_type):
+        elif isinstance(effect_meta, CapCutVoiceCharactersEffectType):
             self.category_id = "tone"
             self.category_name = "Voice characters"
-        elif isinstance(effect_meta, CapCut_Speech_to_song_effect_type):
+        elif isinstance(effect_meta, CapCutSpeechToSongEffectType):
             self.category_id = "speech_to_song"
             self.category_name = "Speech to song"
         else:
@@ -159,7 +159,7 @@ class Audio_segment(Media_segment):
         self.fade = None
         self.effects = []
 
-    def add_effect(self, effect_type: Union[Audio_scene_effect_type, Tone_effect_type, Speech_to_song_type, CapCut_Voice_filters_effect_type, CapCut_Voice_characters_effect_type, CapCut_Speech_to_song_effect_type],
+    def add_effect(self, effect_type: Union[AudioSceneEffectType, ToneEffectType, SpeechToSongType, CapCutVoiceFiltersEffectType, CapCutVoiceCharactersEffectType, CapCutSpeechToSongEffectType],
                    params: Optional[List[Optional[float]]] = None,
                    effect_id: Optional[str] = None) -> "Audio_segment":
         """为音频片段添加一个作用于整个片段的音频效果, 目前"声音成曲"效果不能自动被剪映所识别

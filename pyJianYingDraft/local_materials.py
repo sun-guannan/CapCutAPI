@@ -4,7 +4,6 @@ import subprocess
 import json
 from typing import Optional, Literal
 from typing import Dict, Any
-import imageio.v2 as imageio
 
 class Crop_settings:
     """素材的裁剪设置, 各属性均在0-1之间, 注意素材的坐标原点在左上角"""

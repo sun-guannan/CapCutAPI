@@ -9,7 +9,7 @@ from typing import Type, Dict, List, Any
 
 from . import util
 from . import exceptions
-from .template_mode import ImportedTrack, EditableTrack, ImportedMediaTrack, ImportedTextTrack, Shrink_mode, Extend_mode, import_track
+from .template_mode import EditableTrack, ImportedMediaTrack, ImportedTextTrack, Shrink_mode, Extend_mode, import_track
 from .time_util import Timerange, tim, srt_tstamp
 from .local_materials import Video_material, Audio_material
 from .segment import Base_segment, Speed, Clip_settings
@@ -20,7 +20,7 @@ from .text_segment import Text_segment, Text_style, TextBubble, Text_border, Tex
 from .track import Track_type, Base_track, Track
 
 from settings.local import IS_CAPCUT_ENV
-from .metadata import Video_scene_effect_type, Video_character_effect_type, Filter_type, Font_type
+from .metadata import VideoSceneEffectType, VideoCharacterEffectType, FilterType, FontType
 
 class Script_material:
     """草稿文件中的素材信息部分"""
@@ -408,7 +408,7 @@ class Script_file:
 
         return self
 
-    def add_effect(self, effect: Union[Video_scene_effect_type, Video_character_effect_type],
+    def add_effect(self, effect: Union[VideoSceneEffectType, VideoCharacterEffectType],
                    t_range: Timerange, track_name: Optional[str] = None, *,
                    params: Optional[List[Optional[float]]] = None) -> "Script_file":
         """向指定的特效轨道中添加一个特效片段
@@ -437,7 +437,7 @@ class Script_file:
             self.materials.video_effects.append(segment.effect_inst)
         return self
 
-    def add_filter(self, filter_meta: Filter_type, t_range: Timerange,
+    def add_filter(self, filter_meta: FilterType, t_range: Timerange,
                    track_name: Optional[str] = None, intensity: float = 100.0) -> "Script_file":
         """向指定的滤镜轨道中添加一个滤镜片段
 
@@ -499,9 +499,9 @@ class Script_file:
 
         if font:
             try:
-                font_type = getattr(Font_type, font)
+                font_type = getattr(FontType, font)
             except:
-                available_fonts = [attr for attr in dir(Font_type) if not attr.startswith('_')]
+                available_fonts = [attr for attr in dir(FontType) if not attr.startswith('_')]
                 raise ValueError(f"Unsupported font: {font}, please use one of the fonts in Font_type: {available_fonts}")
 
         time_offset = tim(time_offset)

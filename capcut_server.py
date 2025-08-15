@@ -1,24 +1,23 @@
-import requests
 from flask import Flask, request, jsonify, Response
 from datetime import datetime
-import pyJianYingDraft as draft
-from pyJianYingDraft.metadata.animation_meta import Intro_type, Outro_type, Group_animation_type
-from pyJianYingDraft.metadata.capcut_animation_meta import CapCut_Intro_type, CapCut_Outro_type, CapCut_Group_animation_type
-from pyJianYingDraft.metadata.transition_meta import Transition_type
-from pyJianYingDraft.metadata.capcut_transition_meta import CapCut_Transition_type
-from pyJianYingDraft.metadata.mask_meta import Mask_type
-from pyJianYingDraft.metadata.capcut_mask_meta import CapCut_Mask_type
-from pyJianYingDraft.metadata.audio_effect_meta import Tone_effect_type, Audio_scene_effect_type, Speech_to_song_type
-from pyJianYingDraft.metadata.capcut_audio_effect_meta import CapCut_Voice_filters_effect_type, CapCut_Voice_characters_effect_type, CapCut_Speech_to_song_effect_type
-from pyJianYingDraft.metadata.font_meta import Font_type
-from pyJianYingDraft.metadata.animation_meta import Text_intro, Text_outro, Text_loop_anim
-from pyJianYingDraft.metadata.capcut_text_animation_meta import CapCut_Text_intro, CapCut_Text_outro, CapCut_Text_loop_anim
-from pyJianYingDraft.metadata.video_effect_meta import Video_scene_effect_type, Video_character_effect_type
-from pyJianYingDraft.metadata.capcut_effect_meta import CapCut_Video_scene_effect_type, CapCut_Video_character_effect_type
-import random
-import uuid
+from pyJianYingDraft.metadata import IntroType, OutroType, GroupAnimationType
+from pyJianYingDraft.metadata import CapCutIntroType, CapCutOutroType, CapCutGroupAnimationType
+from pyJianYingDraft.metadata.transition_meta import TransitionType
+from pyJianYingDraft.metadata.capcut_transition_meta import CapCutTransitionType
+from pyJianYingDraft.metadata.mask_meta import MaskType
+from pyJianYingDraft.metadata.capcut_mask_meta import CapCutMaskType
+from pyJianYingDraft.metadata import ToneEffectType, AudioSceneEffectType, SpeechToSongType
+from pyJianYingDraft.metadata.capcut_audio_effect_meta import CapCutVoiceFiltersEffectType, CapCutVoiceCharactersEffectType, CapCutSpeechToSongEffectType
+from pyJianYingDraft.metadata.font_meta import FontType
+from pyJianYingDraft.metadata import TextIntro, TextOutro, TextLoopAnim
+from pyJianYingDraft.metadata.capcut_text_animation_meta import CapCutTextIntro, CapCutTextOutro, CapCutTextLoopAnim
+from pyJianYingDraft.metadata.video_effect_meta import VideoSceneEffectType, VideoCharacterEffectType
+from pyJianYingDraft.metadata.capcut_effect_meta import CapCutVideoSceneEffectType, CapCutVideoCharacterEffectType
+from dotenv import load_dotenv
+from pathlib import Path
+import logging
 import json
-import codecs
+import os
 from add_audio_track import add_audio_track
 from add_video_track import add_video_track
 from add_text_impl import add_text_impl
@@ -33,6 +32,18 @@ from util import generate_draft_url as utilgenerate_draft_url, hex_to_rgb
 from pyJianYingDraft.text_segment import TextStyleRange, Text_style, Text_border
 
 from settings.local import IS_CAPCUT_ENV, DRAFT_DOMAIN, PREVIEW_ROUTER, PORT
+
+# Load environment variables from .env file
+env_file = Path(__file__).parent / ".env"
+logger = logging.getLogger(__name__)
+if not logging.getLogger().hasHandlers():
+    logging.basicConfig(level=logging.INFO)
+if env_file.exists():
+    load_dotenv(env_file)
+    logger.info(f"Loaded environment from: {env_file}")
+else:
+    logger.warning(f"Environment file not found: {env_file}")
+    logger.info("Using default environment variables")
 
 app = Flask(__name__)
  
@@ -910,13 +921,13 @@ def get_intro_animation_types():
         
         if IS_CAPCUT_ENV:
             # Return entrance animation types in CapCut environment
-            for name, member in CapCut_Intro_type.__members__.items():
+            for name, member in CapCutIntroType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
         else:
             # Return entrance animation types in JianYing environment
-            for name, member in Intro_type.__members__.items():
+            for name, member in IntroType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
@@ -947,13 +958,13 @@ def get_outro_animation_types():
         
         if IS_CAPCUT_ENV:
             # Return exit animation types in CapCut environment
-            for name, member in CapCut_Outro_type.__members__.items():
+            for name, member in CapCutOutroType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
         else:
             # Return exit animation types in JianYing environment
-            for name, member in Outro_type.__members__.items():
+            for name, member in OutroType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
@@ -985,13 +996,13 @@ def get_combo_animation_types():
         
         if IS_CAPCUT_ENV:
             # Return combo animation types in CapCut environment
-            for name, member in CapCut_Group_animation_type.__members__.items():
+            for name, member in CapCutGroupAnimationType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
         else:
             # Return combo animation types in JianYing environment
-            for name, member in Group_animation_type.__members__.items():
+            for name, member in GroupAnimationType.__members__.items():
                 animation_types.append({
                     "name": name
                 })
@@ -1023,13 +1034,13 @@ def get_transition_types():
         
         if IS_CAPCUT_ENV:
             # Return transition animation types in CapCut environment
-            for name, member in CapCut_Transition_type.__members__.items():
+            for name, member in CapCutTransitionType.__members__.items():
                 transition_types.append({
                     "name": name
                 })
         else:
             # Return transition animation types in JianYing environment
-            for name, member in Transition_type.__members__.items():
+            for name, member in TransitionType.__members__.items():
                 transition_types.append({
                     "name": name
                 })
@@ -1061,13 +1072,13 @@ def get_mask_types():
         
         if IS_CAPCUT_ENV:
             # Return mask types in CapCut environment
-            for name, member in CapCut_Mask_type.__members__.items():
+            for name, member in CapCutMaskType.__members__.items():
                 mask_types.append({
                     "name": name
                 })
         else:
             # Return mask types in JianYing environment
-            for name, member in Mask_type.__members__.items():
+            for name, member in MaskType.__members__.items():
                 mask_types.append({
                     "name": name
                 })
@@ -1102,7 +1113,7 @@ def get_audio_effect_types():
         if IS_CAPCUT_ENV:
             # Return audio effect types in CapCut environment
             # 1. Voice filters effect types
-            for name, member in CapCut_Voice_filters_effect_type.__members__.items():
+            for name, member in CapCutVoiceFiltersEffectType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1119,7 +1130,7 @@ def get_audio_effect_types():
                 })
             
             # 2. Voice characters effect types
-            for name, member in CapCut_Voice_characters_effect_type.__members__.items():
+            for name, member in CapCutVoiceCharactersEffectType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1136,7 +1147,7 @@ def get_audio_effect_types():
                 })
             
             # 3. Speech to song effect types
-            for name, member in CapCut_Speech_to_song_effect_type.__members__.items():
+            for name, member in CapCutSpeechToSongEffectType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1154,7 +1165,7 @@ def get_audio_effect_types():
         else:
             # Return audio effect types in JianYing environment
             # 1. Tone effect types
-            for name, member in Tone_effect_type.__members__.items():
+            for name, member in ToneEffectType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1171,7 +1182,7 @@ def get_audio_effect_types():
                 })
             
             # 2. Audio scene effect types
-            for name, member in Audio_scene_effect_type.__members__.items():
+            for name, member in AudioSceneEffectType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1188,7 +1199,7 @@ def get_audio_effect_types():
                 })
             
             # 3. Speech to song effect types
-            for name, member in Speech_to_song_type.__members__.items():
+            for name, member in SpeechToSongType.__members__.items():
                 params_info = []
                 for param in member.value.params:
                     params_info.append({
@@ -1229,7 +1240,7 @@ def get_font_types():
         font_types = []
         
         # Return font types in JianYing environment
-        for name, member in Font_type.__members__.items():
+        for name, member in FontType.__members__.items():
             font_types.append({
                 "name": name
             })
@@ -1261,13 +1272,13 @@ def get_text_intro_types():
         
         if IS_CAPCUT_ENV:
             # Return text entrance animation types in CapCut environment
-            for name, member in CapCut_Text_intro.__members__.items():
+            for name, member in CapCutTextIntro.__members__.items():
                 text_intro_types.append({
                     "name": name
                 })
         else:
             # Return text entrance animation types in JianYing environment
-            for name, member in Text_intro.__members__.items():
+            for name, member in TextIntro.__members__.items():
                 text_intro_types.append({
                     "name": name
                 })
@@ -1298,13 +1309,13 @@ def get_text_outro_types():
         
         if IS_CAPCUT_ENV:
             # Return text exit animation types in CapCut environment
-            for name, member in CapCut_Text_outro.__members__.items():
+            for name, member in CapCutTextOutro.__members__.items():
                 text_outro_types.append({
                     "name": name
                 })
         else:
             # Return text exit animation types in JianYing environment
-            for name, member in Text_outro.__members__.items():
+            for name, member in TextOutro.__members__.items():
                 text_outro_types.append({
                     "name": name
                 })
@@ -1335,13 +1346,13 @@ def get_text_loop_anim_types():
         
         if IS_CAPCUT_ENV:
             # Return text loop animation types in CapCut environment
-            for name, member in CapCut_Text_loop_anim.__members__.items():
+            for name, member in CapCutTextLoopAnim.__members__.items():
                 text_loop_anim_types.append({
                     "name": name
                 })
         else:
             # Return text loop animation types in JianYing environment
-            for name, member in Text_loop_anim.__members__.items():
+            for name, member in TextLoopAnim.__members__.items():
                 text_loop_anim_types.append({
                     "name": name
                 })
@@ -1373,13 +1384,13 @@ def get_video_scene_effect_types():
         
         if IS_CAPCUT_ENV:
             # Return scene effect types in CapCut environment
-            for name, member in CapCut_Video_scene_effect_type.__members__.items():
+            for name, member in CapCutVideoSceneEffectType.__members__.items():
                 effect_types.append({
                     "name": name
                 })
         else:
             # Return scene effect types in JianYing environment
-            for name, member in Video_scene_effect_type.__members__.items():
+            for name, member in VideoSceneEffectType.__members__.items():
                 effect_types.append({
                     "name": name
                 })
@@ -1411,13 +1422,13 @@ def get_video_character_effect_types():
         
         if IS_CAPCUT_ENV:
             # Return character effect types in CapCut environment
-            for name, member in CapCut_Video_character_effect_type.__members__.items():
+            for name, member in CapCutVideoCharacterEffectType.__members__.items():
                 effect_types.append({
                     "name": name
                 })
         else:
             # Return character effect types in JianYing environment
-            for name, member in Video_character_effect_type.__members__.items():
+            for name, member in VideoCharacterEffectType.__members__.items():
                 effect_types.append({
                     "name": name
                 })
@@ -1429,6 +1440,131 @@ def get_video_character_effect_types():
         result["success"] = False
         result["error"] = f"Error occurred while getting character effect types: {str(e)}"
         return jsonify(result)
+
+
+@app.route('/generate_video', methods=['POST'])
+def generate_video_api():
+    data = request.get_json()
+
+    # Required/optional parameters
+    draft_id = data.get('draft_id')
+    resolution = data.get('resolution')
+    framerate = data.get('framerate')
+
+    result = {
+        "success": False,
+        "output": "",
+        "error": ""
+    }
+
+    # Validate required parameter
+    if not draft_id:
+        result["error"] = "Hi, the required parameter 'draft_id' is missing. Please add it and try again."
+        return jsonify(result)
+
+    try:
+        from celery import Celery
+        # Get draft content from Redis cache instead of reading file
+        script = query_script_impl(draft_id, force_update=False)
+        if script is None:
+            result["error"] = f"Draft {draft_id} not found in cache. Please create or save the draft first."
+            return jsonify(result)
+        
+        # Convert script object to dictionary for Celery task
+        import json
+        draft_content = json.loads(script.dumps())
+
+        # Prepare Celery client for remote task dispatch
+        broker_url = os.getenv('CELERY_BROKER_URL') or os.getenv('REDIS_URL')
+        backend_url = os.getenv('CELERY_RESULT_BACKEND') or os.getenv('REDIS_URL')
+
+        if not broker_url or not backend_url:
+            result["error"] = "CELERY_BROKER_URL and CELERY_RESULT_BACKEND environment variables are required"
+            return jsonify(result)
+
+        celery_client = Celery(broker=broker_url, backend=backend_url)
+        # Quick worker availability check
+        try:
+            insp = celery_client.control.inspect(timeout=1)
+            ping_result = insp.ping() if insp else None
+        except Exception:
+            ping_result = None
+        if not ping_result:
+            logger.warning("No Celery workers responded to ping. Verify worker is running and connected to the same broker/result backend.")
+
+        # Build a chain of remote tasks by task name
+        process_sig = celery_client.signature(
+            's3_asset_downloader.tasks.process_draft_content',
+            kwargs={
+                'draft_content': draft_content
+            },
+            queue='default'  # Explicitly specify default queue
+        )
+
+        generate_sig = celery_client.signature(
+            's3_asset_downloader.tasks.generate_video',
+            kwargs={
+                'output_path': None,
+                'resolution': resolution,
+                'framerate': framerate
+            },
+            queue='default'  # Explicitly specify default queue
+        )
+
+        chain_result = (process_sig | generate_sig).apply_async()
+        logger.info(f"Dispatched Celery chain. Final task id: {chain_result.id}")
+
+        # Traverse parents to get the first task id
+        first_result = chain_result
+        while getattr(first_result, 'parent', None) is not None:
+            first_result = first_result.parent
+
+        result["success"] = True
+        result["output"] = {
+            "process_task_id": getattr(first_result, 'id', None),
+            "final_task_id": chain_result.id
+        }
+        return jsonify(result)
+
+    except Exception as e:
+        result["error"] = f"Error occurred while generating video: {str(e)}"
+        return jsonify(result)
+
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for production monitoring"""
+    try:
+        # Check Redis connection if available
+        redis_status = "unknown"
+        try:
+            from redis_draft_storage import get_redis_storage
+            redis_storage = get_redis_storage()
+            redis_storage.redis_client.ping()
+            redis_status = "healthy"
+        except Exception:
+            redis_status = "unavailable"
+        
+        # Basic health information
+        health_info = {
+            "status": "healthy",
+            "timestamp": datetime.now().isoformat(),
+            "version": "1.0.0",
+            "services": {
+                "redis": redis_status,
+                "api": "healthy"
+            }
+        }
+        
+        return jsonify(health_info), 200
+        
+    except Exception as e:
+        error_info = {
+            "status": "unhealthy",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        }
+        return jsonify(error_info), 503
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import time
 from util import generate_draft_url, is_windows_path, url_to_hash
 import re
 from typing import Optional, Dict, Tuple, List
-from pyJianYingDraft import exceptions, Audio_scene_effect_type, Tone_effect_type, Speech_to_song_type, CapCut_Voice_filters_effect_type,CapCut_Voice_characters_effect_type,CapCut_Speech_to_song_effect_type, trange
+from pyJianYingDraft import exceptions, AudioSceneEffectType, ToneEffectType, SpeechToSongType, CapCutVoiceFiltersEffectType,CapCutVoiceCharactersEffectType,CapCutSpeechToSongEffectType, trange
 from create_draft import get_or_create_draft
 from settings.local import IS_CAPCUT_ENV
 
@@ -121,29 +121,29 @@ def add_audio_track(
             if IS_CAPCUT_ENV:
                 # In CapCut environment, look for effects in CapCut_Voice_filters_effect_type
                 try:
-                    effect_type = getattr(CapCut_Voice_filters_effect_type, effect_name)
+                    effect_type = getattr(CapCutVoiceFiltersEffectType, effect_name)
                 except AttributeError:
                     try:
                         # Look for effects in CapCut_Voice_characters_effect_type
-                        effect_type = getattr(CapCut_Voice_characters_effect_type, effect_name)
+                        effect_type = getattr(CapCutVoiceCharactersEffectType, effect_name)
                     except AttributeError:
                         # If still not found, look for effects in CapCut_Speech_to_song_effect_type
                         try:
-                            effect_type = getattr(CapCut_Speech_to_song_effect_type, effect_name)
+                            effect_type = getattr(CapCutSpeechToSongEffectType, effect_name)
                         except AttributeError:
                             effect_type = None
             else:
                 # In JianYing environment, look for effects in Audio_scene_effect_type
                 try:
-                    effect_type = getattr(Audio_scene_effect_type, effect_name)
+                    effect_type = getattr(AudioSceneEffectType, effect_name)
                 except AttributeError:
                     # If not found in Audio_scene_effect_type, continue searching in other effect types
                     try:
-                        effect_type = getattr(Tone_effect_type, effect_name)
+                        effect_type = getattr(ToneEffectType, effect_name)
                     except AttributeError:
                         # If still not found, look for effects in Speech_to_song_type
                         try:
-                            effect_type = getattr(Speech_to_song_type, effect_name)
+                            effect_type = getattr(SpeechToSongType, effect_name)
                         except AttributeError:
                             effect_type = None
             

@@ -7,11 +7,11 @@ from typing import Literal, Dict, List, Any
 
 from .time_util import Timerange
 
-from .metadata.animation_meta import Animation_meta
-from .metadata import Intro_type, Outro_type, Group_animation_type
-from .metadata import CapCut_Intro_type, CapCut_Outro_type, CapCut_Group_animation_type
-from .metadata import Text_intro, Text_outro, Text_loop_anim
-from .metadata import CapCut_Text_intro, CapCut_Text_loop_anim, CapCut_Text_outro
+from .metadata.effect_meta import AnimationMeta
+from .metadata import IntroType, OutroType, GroupAnimationType
+from .metadata import CapCutIntroType, CapCutOutroType, CapCutGroupAnimationType
+from .metadata import TextIntro, TextOutro, TextLoopAnim
+from .metadata import CapCutTextIntro, CapCutTextLoopAnim, CapCutTextOutro
 
 class Animation:
     """一个视频/文本动画效果"""
@@ -33,7 +33,7 @@ class Animation:
     is_video_animation: bool
     """是否为视频动画, 在子类中定义"""
 
-    def __init__(self, animation_meta: Animation_meta, start: int, duration: int):
+    def __init__(self, animation_meta: AnimationMeta, start: int, duration: int):
         self.name = animation_meta.title
         self.effect_id = animation_meta.effect_id
         self.resource_id = animation_meta.resource_id
@@ -63,15 +63,15 @@ class Video_animation(Animation):
 
     animation_type: Literal["in", "out", "group"]
 
-    def __init__(self, animation_type: Union[Intro_type, Outro_type, Group_animation_type, CapCut_Intro_type, CapCut_Outro_type, CapCut_Group_animation_type],
+    def __init__(self, animation_type: Union[IntroType, OutroType, GroupAnimationType, CapCutIntroType, CapCutOutroType, CapCutGroupAnimationType],
                  start: int, duration: int):
         super().__init__(animation_type.value, start, duration)
 
-        if ((isinstance(animation_type, Intro_type) or isinstance(animation_type, CapCut_Intro_type))):
+        if ((isinstance(animation_type, IntroType) or isinstance(animation_type, CapCutIntroType))):
             self.animation_type = "in"
-        elif isinstance(animation_type, Outro_type) or isinstance(animation_type, CapCut_Outro_type):
+        elif isinstance(animation_type, OutroType) or isinstance(animation_type, CapCutOutroType):
             self.animation_type = "out"
-        elif isinstance(animation_type, Group_animation_type) or isinstance(animation_type, CapCut_Group_animation_type):
+        elif isinstance(animation_type, GroupAnimationType) or isinstance(animation_type, CapCutGroupAnimationType):
             self.animation_type = "group"
 
         self.is_video_animation = True
@@ -81,15 +81,15 @@ class Text_animation(Animation):
 
     animation_type: Literal["in", "out", "loop"]
 
-    def __init__(self, animation_type: Union[Text_intro, Text_outro, Text_loop_anim, CapCut_Text_intro, CapCut_Text_outro, CapCut_Text_loop_anim],
+    def __init__(self, animation_type: Union[TextIntro, TextOutro, TextLoopAnim, CapCutTextIntro, CapCutTextOutro, CapCutTextLoopAnim],
                  start: int, duration: int):
         super().__init__(animation_type.value, start, duration)
 
-        if (isinstance(animation_type, Text_intro) or isinstance(animation_type, CapCut_Text_intro)):
+        if (isinstance(animation_type, TextIntro) or isinstance(animation_type, CapCutTextIntro)):
             self.animation_type = "in"
-        elif (isinstance(animation_type, Text_outro) or isinstance(animation_type, CapCut_Text_outro)):
+        elif (isinstance(animation_type, TextOutro) or isinstance(animation_type, CapCutTextOutro)):
             self.animation_type = "out"
-        elif (isinstance(animation_type, Text_loop_anim) or isinstance(animation_type, CapCut_Text_loop_anim)):
+        elif (isinstance(animation_type, TextLoopAnim) or isinstance(animation_type, CapCutTextLoopAnim)):
             self.animation_type = "loop"
 
         self.is_video_animation = False

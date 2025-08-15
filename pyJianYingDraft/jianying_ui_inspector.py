@@ -1,5 +1,4 @@
 import uiautomation as auto
-import time
 import json
 from typing import Dict, List, Optional
 

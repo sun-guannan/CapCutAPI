@@ -7,14 +7,14 @@ from copy import deepcopy
 from typing import Dict, Tuple, Any, List
 from typing import Union, Optional, Literal
 
-from pyJianYingDraft.metadata.capcut_text_animation_meta import CapCut_Text_intro, CapCut_Text_outro, CapCut_Text_loop_anim
+from pyJianYingDraft.metadata.capcut_text_animation_meta import CapCutTextIntro, CapCutTextOutro, CapCutTextLoopAnim
 
 from .time_util import Timerange, tim
 from .segment import Clip_settings, Visual_segment
 from .animation import Segment_animations, Text_animation
 
-from .metadata import Font_type, Effect_meta
-from .metadata import Text_intro, Text_outro, Text_loop_anim
+from .metadata import FontType, EffectMeta
+from .metadata import TextIntro, TextOutro, TextLoopAnim
 
 class Text_style:
     """字体样式类"""
@@ -256,7 +256,7 @@ class TextStyleRange:
     """字体样式"""
     border: Optional[Text_border]
     """文本描边参数，None表示无描边"""
-    font: Optional[Effect_meta]
+    font: Optional[EffectMeta]
     """字体设置，None表示使用全局字体"""
     
     def __init__(self, start: int, end: int, style: Text_style, border: Optional[Text_border] = None, font_str:str = None):
@@ -275,9 +275,9 @@ class TextStyleRange:
         self.border = border
         if font_str:
             try:
-                font_type = getattr(Font_type, font_str).value
+                font_type = getattr(FontType, font_str).value
             except:
-                available_fonts = [attr for attr in dir(Font_type) if not attr.startswith('_')]
+                available_fonts = [attr for attr in dir(FontType) if not attr.startswith('_')]
                 raise ValueError(f"不支持的字体：{font_str}，请使用Font_type中的字体之一：{available_fonts}")
             self.font = font_type
     
@@ -294,7 +294,7 @@ class Text_segment(Visual_segment):
 
     text: str
     """文本内容"""
-    font: Optional[Effect_meta]
+    font: Optional[EffectMeta]
     """字体类型"""
     style: Text_style
     """字体样式"""
@@ -321,7 +321,7 @@ class Text_segment(Visual_segment):
     """文本的多种样式列表"""
 
     def __init__(self, text: str, timerange: Timerange, *,
-                 font: Optional[Font_type] = None,
+                 font: Optional[FontType] = None,
                  style: Optional[Text_style] = None, clip_settings: Optional[Clip_settings] = None,
                  border: Optional[Text_border] = None, background: Optional[Text_background] = None,
                  shadow: Optional[Text_shadow] = None,
@@ -383,8 +383,8 @@ class Text_segment(Visual_segment):
 
         return new_segment
 
-    def add_animation(self, animation_type: Union[Text_intro, Text_outro, Text_loop_anim,
-                                                  CapCut_Text_intro, CapCut_Text_outro, CapCut_Text_loop_anim],
+    def add_animation(self, animation_type: Union[TextIntro, TextOutro, TextLoopAnim,
+                                                  CapCutTextIntro, CapCutTextOutro, CapCutTextLoopAnim],
                       duration: Union[str, float] = 500000) -> "Text_segment":
         """将给定的入场/出场/循环动画添加到此片段的动画列表中, 出入场动画的持续时间可以自行设置, 循环动画则会自动填满其余无动画部分
 
@@ -397,11 +397,11 @@ class Text_segment(Visual_segment):
         """
         duration = min(tim(duration), self.target_timerange.duration)
 
-        if (isinstance(animation_type, Text_intro) or isinstance(animation_type, CapCut_Text_intro)):
+        if (isinstance(animation_type, TextIntro) or isinstance(animation_type, CapCutTextIntro)):
             start = 0
-        elif (isinstance(animation_type, Text_outro) or isinstance(animation_type, CapCut_Text_outro)):
+        elif (isinstance(animation_type, TextOutro) or isinstance(animation_type, CapCutTextOutro)):
             start = self.target_timerange.duration - duration
-        elif (isinstance(animation_type, Text_loop_anim) or isinstance(animation_type, CapCut_Text_loop_anim)):
+        elif (isinstance(animation_type, TextLoopAnim) or isinstance(animation_type, CapCutTextLoopAnim)):
             intro_trange = self.animations_instance and self.animations_instance.get_animation_trange("in")
             outro_trange = self.animations_instance and self.animations_instance.get_animation_trange("out")
             start = intro_trange.start if intro_trange else 0

@@ -5,7 +5,7 @@ import shutil
 from util import zip_draft, is_windows_path
 from oss import upload_to_oss
 from typing import Dict, Literal
-from draft_cache import DRAFT_CACHE
+from draft_cache import get_from_cache
 from save_task_cache import DRAFT_TASKS, get_task_status, update_tasks_cache, update_task_field, increment_task_field, update_task_fields, create_task
 from downloader import download_audio, download_file, download_image, download_video
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,10 +13,7 @@ import imageio.v2 as imageio
 import subprocess
 import json
 from get_duration_impl import get_video_duration
-import uuid
-import threading
 from collections import OrderedDict
-import time
 import requests # Import requests for making HTTP calls
 import logging
 # Import configuration
@@ -53,21 +50,21 @@ def build_asset_path(draft_folder: str, draft_id: str, asset_type: str, material
 def save_draft_background(draft_id, draft_folder, task_id):
     """Background save draft to OSS"""
     try:
-        # Get draft information from global cache
-        if draft_id not in DRAFT_CACHE:
+        # Get draft information from cache (memory first, then Redis)
+        script = get_from_cache(draft_id)
+        if script is None:
             task_status = {
                 "status": "failed",
-                "message": f"Draft {draft_id} does not exist in cache",
+                "message": f"Draft {draft_id} does not exist in cache (memory or Redis)",
                 "progress": 0,
                 "completed_files": 0,
                 "total_files": 0,
                 "draft_url": ""
             }
             update_tasks_cache(task_id, task_status)  # Use new cache management function
-            logger.error(f"Draft {draft_id} does not exist in cache, task {task_id} failed.")
+            logger.error(f"Draft {draft_id} does not exist in cache (memory or Redis), task {task_id} failed.")
             return
             
-        script = DRAFT_CACHE[draft_id]
         logger.info(f"Successfully retrieved draft {draft_id} from cache.")
         
         # Update task status to processing
@@ -540,12 +537,12 @@ def query_script_impl(draft_id: str, force_update: bool = True):
     :param force_update: Whether to force refresh media metadata, default is True
     :return: Script object
     """
-    # Get draft information from global cache
-    if draft_id not in DRAFT_CACHE:
-        logger.warning(f"Draft {draft_id} does not exist in cache.")
+    # Get draft information from cache (memory first, then Redis)
+    script = get_from_cache(draft_id)
+    if script is None:
+        logger.warning(f"Draft {draft_id} does not exist in cache (memory or Redis).")
         return None
         
-    script = DRAFT_CACHE[draft_id]
     logger.info(f"Retrieved draft {draft_id} from cache.")
     
     # If force_update is True, force refresh media metadata

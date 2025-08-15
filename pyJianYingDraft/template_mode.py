@@ -12,7 +12,7 @@ from .local_materials import Video_material, Audio_material
 from .video_segment import Video_segment, Clip_settings
 from .audio_segment import Audio_segment
 from .keyframe import Keyframe_list, Keyframe_property, Keyframe
-from .metadata import Audio_scene_effect_type, Tone_effect_type, Speech_to_song_type, Effect_param_instance
+from .metadata import AudioSceneEffectType
 
 from typing import List, Dict, Any
 
@@ -308,7 +308,7 @@ def import_track(json_data: Dict[str, Any], imported_materials: Dict[str, Any] =
                     if "audio_effects" in imported_materials and imported_materials["audio_effects"]:
                         effect_data = imported_materials["audio_effects"][0]
                         # 根据资源ID查找对应的效果类型
-                        for effect_type in Audio_scene_effect_type:
+                        for effect_type in AudioSceneEffectType:
                             if effect_type.value.resource_id == effect_data["resource_id"]:
                                 # 将参数值从0-1映射到0-100
                                 params = []

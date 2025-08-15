@@ -161,9 +161,9 @@ def add_image_impl(
     if intro_anim:
         try:
             if IS_CAPCUT_ENV:
-                animation_type = getattr(draft.CapCut_Intro_type, intro_anim)
+                animation_type = getattr(draft.CapCutIntroType, intro_anim)
             else:
-                animation_type = getattr(draft.Intro_type, intro_anim)
+                animation_type = getattr(draft.IntroType, intro_anim)
             image_segment.add_animation(animation_type, intro_animation_duration * 1e6)  # Use microsecond unit for animation duration
         except AttributeError:
             raise ValueError(f"Warning: Unsupported entrance animation type {intro_anim}, this parameter will be ignored")
@@ -172,9 +172,9 @@ def add_image_impl(
     if outro_animation:
         try:
             if IS_CAPCUT_ENV:
-                outro_type = getattr(draft.CapCut_Outro_type, outro_animation)
+                outro_type = getattr(draft.CapCutOutroType, outro_animation)
             else:
-                outro_type = getattr(draft.Outro_type, outro_animation)
+                outro_type = getattr(draft.OutroType, outro_animation)
             image_segment.add_animation(outro_type, outro_animation_duration * 1e6)  # Use microsecond unit for animation duration
         except AttributeError:
             raise ValueError(f"Warning: Unsupported exit animation type {outro_animation}, this parameter will be ignored")
@@ -183,9 +183,9 @@ def add_image_impl(
     if combo_animation:
         try:
             if IS_CAPCUT_ENV:
-                combo_type = getattr(draft.CapCut_Group_animation_type, combo_animation)
+                combo_type = getattr(draft.CapCutGroupAnimationType, combo_animation)
             else:
-                combo_type = getattr(draft.Group_animation_type, combo_animation)
+                combo_type = getattr(draft.GroupAnimationType, combo_animation)
             image_segment.add_animation(combo_type, combo_animation_duration * 1e6)  # Use microsecond unit for animation duration
         except AttributeError:
             raise ValueError(f"Warning: Unsupported combo animation type {combo_animation}, this parameter will be ignored")
@@ -194,9 +194,9 @@ def add_image_impl(
     if transition:
         try:
             if IS_CAPCUT_ENV:
-                transition_type = getattr(draft.CapCut_Transition_type, transition)
+                transition_type = getattr(draft.CapCutTransitionType, transition)
             else:
-                transition_type = getattr(draft.Transition_type, transition)
+                transition_type = getattr(draft.TransitionType, transition)
             # Convert seconds to microseconds (multiply by 1000000)
             duration_microseconds = int(transition_duration * 1000000) if transition_duration is not None else None
             image_segment.add_transition(transition_type, duration=duration_microseconds)
@@ -207,9 +207,9 @@ def add_image_impl(
     if mask_type:
         try:
             if IS_CAPCUT_ENV:
-                mask_type_enum = getattr(draft.CapCut_Mask_type, mask_type)
+                mask_type_enum = getattr(draft.CapCutMaskType, mask_type)
             else:
-                mask_type_enum = getattr(draft.Mask_type, mask_type)
+                mask_type_enum = getattr(draft.MaskType, mask_type)
             image_segment.add_mask(
                 script,
                 mask_type_enum,  # Remove keyword name, pass as positional argument

@@ -1,4 +1,4 @@
-from pyJianYingDraft import trange, Video_scene_effect_type, Video_character_effect_type, CapCut_Video_scene_effect_type, CapCut_Video_character_effect_type, exceptions
+from pyJianYingDraft import trange, VideoSceneEffectType, VideoCharacterEffectType, CapCutVideoSceneEffectType, CapCutVideoCharacterEffectType, exceptions
 import pyJianYingDraft as draft
 from typing import Optional, Dict, List, Union, Literal
 from create_draft import get_or_create_draft
@@ -46,24 +46,24 @@ def add_effect_impl(
         # If in CapCut environment, use CapCut effects
         if effect_category == "scene":
             try:
-                effect_enum = CapCut_Video_scene_effect_type[effect_type]
+                effect_enum = CapCutVideoSceneEffectType[effect_type]
             except:
                 effect_enum = None
         elif effect_category == "character":
             try:
-                effect_enum = CapCut_Video_character_effect_type[effect_type]
+                effect_enum = CapCutVideoCharacterEffectType[effect_type]
             except:
                 effect_enum = None
     else:
         # Default to using JianYing effects
         if effect_category == "scene":
             try:
-                effect_enum = Video_scene_effect_type[effect_type]
+                effect_enum = VideoSceneEffectType[effect_type]
             except:
                 effect_enum = None
         elif effect_category == "character":
             try:
-                effect_enum = Video_character_effect_type[effect_type]
+                effect_enum = VideoCharacterEffectType[effect_type]
             except:
                 effect_enum = None
     

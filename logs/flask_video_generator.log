@@ -1,0 +1,215 @@
+2025-08-01 11:18:16,918 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-01 11:18:16,918 - flask_video_generator - INFO - Initializing Jianying_controller...
+2025-08-01 11:18:18,076 - flask_video_generator - INFO - Jianying_controller initialized successfully.
+2025-08-01 11:18:18,076 - flask_video_generator - INFO - Starting export for draft: 'demo' to 'D:\jianying-export' with resolution: None, framerate: None
+2025-08-01 11:18:18,077 - flask_video_generator - INFO - Attempting to switch to home page.
+2025-08-01 11:18:19,590 - flask_video_generator - INFO - Successfully switched to home page.
+2025-08-01 11:18:19,591 - flask_video_generator - INFO - Clicking draft: 'demo'
+2025-08-01 11:18:19,604 - flask_video_generator - ERROR - DraftNotFound: No Jianying draft named 'demo' found.
+2025-08-01 11:28:30,862 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-01 11:28:30,863 - flask_video_generator - INFO - Initializing Jianying_controller...
+2025-08-01 11:28:31,948 - flask_video_generator - INFO - Jianying_controller initialized successfully.
+2025-08-01 11:28:31,949 - flask_video_generator - INFO - Starting export for draft: 'demo' to 'D:\jianying-export' with resolution: None, framerate: None
+2025-08-01 11:28:31,949 - flask_video_generator - INFO - Attempting to switch to home page.
+2025-08-01 11:28:33,478 - flask_video_generator - INFO - Successfully switched to home page.
+2025-08-01 11:28:33,479 - flask_video_generator - INFO - Clicking draft: 'demo'
+2025-08-01 11:28:34,052 - flask_video_generator - INFO - Clicked on draft: 'demo'.
+2025-08-01 11:28:34,059 - flask_video_generator - INFO - Waiting for edit window for draft: 'demo' (timeout: 180s)
+2025-08-01 11:28:38,447 - flask_video_generator - INFO - Waiting for export settings window (timeout: 180s) for draft: 'demo'
+2025-08-01 11:30:23,591 - flask_video_generator - INFO - Attempting to set resolution: unchanged, framerate: unchanged for 'demo'
+2025-08-01 11:30:23,592 - flask_video_generator - INFO - Clicking final export button for draft: 'demo'
+2025-08-01 11:32:20,544 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-01 11:32:20,545 - flask_video_generator - INFO - Initializing Jianying_controller...
+2025-08-01 11:32:21,611 - flask_video_generator - INFO - Jianying_controller initialized successfully.
+2025-08-01 11:32:21,611 - flask_video_generator - INFO - Starting export for draft: 'demo' to 'D:\jianying-export' with resolution: None, framerate: None
+2025-08-01 11:32:21,612 - flask_video_generator - INFO - Attempting to switch to home page.
+2025-08-01 11:32:27,230 - flask_video_generator - INFO - Successfully switched to home page.
+2025-08-01 11:32:27,231 - flask_video_generator - INFO - Clicking draft: 'demo'
+2025-08-01 11:32:27,799 - flask_video_generator - INFO - Clicked on draft: 'demo'.
+2025-08-01 11:32:27,799 - flask_video_generator - INFO - Waiting for edit window for draft: 'demo' (timeout: 180s)
+2025-08-01 11:32:32,527 - flask_video_generator - INFO - Waiting for export settings window (timeout: 180s) for draft: 'demo'
+2025-08-01 11:32:35,104 - flask_video_generator - INFO - Attempting to set resolution: unchanged, framerate: unchanged for 'demo'
+2025-08-01 11:32:35,105 - flask_video_generator - INFO - Clicking final export button for draft: 'demo'
+2025-08-01 11:32:43,234 - flask_video_generator - INFO - 导出 demo 至 D:\jianying-export 完成
+2025-08-01 11:32:43,234 - flask_video_generator - INFO - back to home page
+2025-08-11 18:49:31,914 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-12 19:01:48,742 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-12 19:03:18,173 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-12 19:07:52,287 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1754996643_da85ecd1, draft_folder=D:	mp
+2025-08-12 19:07:52,288 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 has been created.
+2025-08-12 19:07:52,288 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1754996643_da85ecd1 from cache.
+2025-08-12 19:07:52,289 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 status updated to 'processing': Preparing draft files.
+2025-08-12 19:07:52,289 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1754996643_da85ecd1
+2025-08-12 19:07:52,315 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 5%: Updating media file metadata.
+2025-08-12 19:07:52,316 - flask_video_generator - INFO - No audio files found in the draft.
+2025-08-12 19:07:52,316 - flask_video_generator - INFO - No video or image files found in the draft.
+2025-08-12 19:07:52,316 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-12 19:07:52,316 - flask_video_generator - INFO - Updated script total duration to: 0 microseconds.
+2025-08-12 19:07:52,317 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-12 19:07:52,317 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 10%: Collected 0 download tasks in total.
+2025-08-12 19:07:52,317 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 70%: Saving draft information.
+2025-08-12 19:07:52,319 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1754996643_da85ecd1/draft_info.json.
+2025-08-12 19:07:52,319 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 completed, draft URL: 
+2025-08-13 17:15:58,464 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1754996643_da85ecd1, draft_folder=D:	mp
+2025-08-13 17:15:58,468 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 has been created.
+2025-08-13 17:15:58,469 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1754996643_da85ecd1 from cache.
+2025-08-13 17:15:58,470 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 status updated to 'processing': Preparing draft files.
+2025-08-13 17:15:58,473 - flask_video_generator - WARNING - Deleting existing draft folder (current working directory): dfd_cat_1754996643_da85ecd1
+2025-08-13 17:15:58,483 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1754996643_da85ecd1
+2025-08-13 17:15:58,538 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 5%: Updating media file metadata.
+2025-08-13 17:15:58,539 - flask_video_generator - INFO - No audio files found in the draft.
+2025-08-13 17:15:58,540 - flask_video_generator - INFO - No video or image files found in the draft.
+2025-08-13 17:15:58,541 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-13 17:15:58,541 - flask_video_generator - INFO - Updated script total duration to: 5000000 microseconds.
+2025-08-13 17:15:58,542 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-13 17:15:58,543 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 10%: Collected 0 download tasks in total.
+2025-08-13 17:15:58,543 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 progress 70%: Saving draft information.
+2025-08-13 17:15:58,548 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1754996643_da85ecd1/draft_info.json.
+2025-08-13 17:15:58,548 - flask_video_generator - INFO - Task dfd_cat_1754996643_da85ecd1 completed, draft URL: 
+2025-08-13 17:48:38,286 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 19:33:12,940 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755084669_581488fe, draft_folder=/Users/sunguannan/Movies/JianyingPro/User Data/Projects/com.lveditor.draft
+2025-08-13 19:33:12,940 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe has been created.
+2025-08-13 19:33:12,941 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1755084669_581488fe from cache.
+2025-08-13 19:33:12,941 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe status updated to 'processing': Preparing draft files.
+2025-08-13 19:33:12,941 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1755084669_581488fe
+2025-08-13 19:33:13,000 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe progress 5%: Updating media file metadata.
+2025-08-13 19:33:13,001 - flask_video_generator - INFO - No audio files found in the draft.
+2025-08-13 19:33:13,155 - flask_video_generator - INFO - Successfully set image image_49fff66b98eb357d.png dimensions: 1280x850.
+2025-08-13 19:33:13,155 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-13 19:33:13,156 - flask_video_generator - INFO - Updated script total duration to: 5000000 microseconds.
+2025-08-13 19:33:13,156 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-13 19:33:13,156 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe progress 10%: Collected 1 download tasks in total.
+2025-08-13 19:33:13,156 - flask_video_generator - INFO - Starting concurrent download of 1 files...
+2025-08-13 19:33:13,269 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe: Successfully downloaded image file, progress 70.
+2025-08-13 19:33:13,270 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe: Concurrent download completed, downloaded 1 files in total.
+2025-08-13 19:33:13,270 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe progress 70%: Saving draft information.
+2025-08-13 19:33:13,270 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1755084669_581488fe/draft_info.json.
+2025-08-13 19:33:13,271 - flask_video_generator - INFO - Task dfd_cat_1755084669_581488fe completed, draft URL: 
+2025-08-13 20:27:38,837 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 20:29:11,746 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 20:35:57,811 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 20:40:07,611 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 22:18:11,949 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 22:19:08,832 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 23:00:17,600 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 23:02:45,989 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 23:08:38,598 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-13 23:36:45,119 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-14 12:39:06,132 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-14 12:49:18,025 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-14 12:50:05,864 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755146968_79cc7d92, draft_folder=/Users/sunguannan/Movies/JianyingPro/User Data/Projects/com.lveditor.draft
+2025-08-14 12:50:05,865 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 has been created.
+2025-08-14 12:50:05,866 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1755146968_79cc7d92 from cache.
+2025-08-14 12:50:05,866 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 status updated to 'processing': Preparing draft files.
+2025-08-14 12:50:05,867 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1755146968_79cc7d92
+2025-08-14 12:50:05,881 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 progress 5%: Updating media file metadata.
+2025-08-14 12:50:05,882 - flask_video_generator - INFO - No audio files found in the draft.
+2025-08-14 12:50:06,108 - flask_video_generator - INFO - Successfully set image image_49fff66b98eb357d.png dimensions: 1280x850.
+2025-08-14 12:50:06,108 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-14 12:50:06,108 - flask_video_generator - INFO - Updated script total duration to: 5000000 microseconds.
+2025-08-14 12:50:06,108 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-14 12:50:06,109 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 progress 10%: Collected 1 download tasks in total.
+2025-08-14 12:50:06,109 - flask_video_generator - INFO - Starting concurrent download of 1 files...
+2025-08-14 12:50:06,215 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92: Successfully downloaded image file, progress 70.
+2025-08-14 12:50:06,216 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92: Concurrent download completed, downloaded 1 files in total.
+2025-08-14 12:50:06,216 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 progress 70%: Saving draft information.
+2025-08-14 12:50:06,218 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1755146968_79cc7d92/draft_info.json.
+2025-08-14 12:50:06,218 - flask_video_generator - INFO - Task dfd_cat_1755146968_79cc7d92 completed, draft URL: 
+2025-08-14 16:20:02,770 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-14 16:21:05,323 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-14 16:27:55,294 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755159702_d7e359f2, draft_folder=C:\Users\hanji\AppData\Local\JianyingPro\User Data\Projects\com.lveditor.draft
+2025-08-14 16:27:55,295 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 has been created.
+2025-08-14 16:27:55,295 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1755159702_d7e359f2 from cache.
+2025-08-14 16:27:55,295 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 status updated to 'processing': Preparing draft files.
+2025-08-14 16:27:55,295 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1755159702_d7e359f2
+2025-08-14 16:27:55,351 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 progress 5%: Updating media file metadata.
+2025-08-14 16:27:55,356 - flask_video_generator - ERROR - Error occurred while checking if audio audio_56336fbddb0e2a7e.mp3 contains video streams: [WinError 2] 系统找不到指定的文件。
+Traceback (most recent call last):
+  File "d:\bluefocus\CapCutAPI\save_draft_impl.py", line 322, in update_media_metadata
+    video_result = subprocess.check_output(video_command, stderr=subprocess.STDOUT)
+  File "C:\Users\hanji\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "C:\Users\hanji\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hanji\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hanji\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 1554, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] 系统找不到指定的文件。
+2025-08-14 16:27:55,366 - flask_video_generator - WARNING - Warning: Unable to get audio audio_56336fbddb0e2a7e.mp3 duration: ffprobe command not found. Please ensure FFmpeg is installed and in system PATH..
+2025-08-14 16:27:55,367 - flask_video_generator - INFO - No video or image files found in the draft.
+2025-08-14 16:27:55,367 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-14 16:27:55,367 - flask_video_generator - INFO - Updated script total duration to: 30000000 microseconds.
+2025-08-14 16:27:55,367 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-14 16:27:55,367 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 progress 10%: Collected 1 download tasks in total.
+2025-08-14 16:27:55,368 - flask_video_generator - INFO - Starting concurrent download of 1 files...
+2025-08-14 16:27:57,071 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2: Successfully downloaded audio file, progress 70.
+2025-08-14 16:27:57,073 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2: Concurrent download completed, downloaded 1 files in total.
+2025-08-14 16:27:57,073 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 progress 70%: Saving draft information.
+2025-08-14 16:27:57,073 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1755159702_d7e359f2/draft_info.json.
+2025-08-14 16:27:57,074 - flask_video_generator - INFO - Task dfd_cat_1755159702_d7e359f2 completed, draft URL: 
+2025-08-15 11:32:44,512 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:35:22,143 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:35:42,757 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:37:12,463 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:48:15,182 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:48:43,953 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:49:19,505 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:50:29,177 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 13:58:30,787 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 14:05:00,579 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755237851_b2c232d0, draft_folder=
+2025-08-15 14:05:00,580 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 has been created.
+2025-08-15 14:05:00,580 - flask_video_generator - INFO - Successfully retrieved draft dfd_cat_1755237851_b2c232d0 from cache.
+2025-08-15 14:05:00,580 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 status updated to 'processing': Preparing draft files.
+2025-08-15 14:05:00,581 - flask_video_generator - INFO - Starting to save draft: dfd_cat_1755237851_b2c232d0
+2025-08-15 14:05:00,649 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 progress 5%: Updating media file metadata.
+2025-08-15 14:05:00,650 - flask_video_generator - INFO - No audio files found in the draft.
+2025-08-15 14:05:00,651 - flask_video_generator - INFO - No video or image files found in the draft.
+2025-08-15 14:05:00,651 - flask_video_generator - INFO - Checking track segment time range conflicts...
+2025-08-15 14:05:00,651 - flask_video_generator - INFO - Updated script total duration to: 5000000 microseconds.
+2025-08-15 14:05:00,652 - flask_video_generator - INFO - Processing pending keyframes...
+2025-08-15 14:05:00,652 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 progress 10%: Collected 0 download tasks in total.
+2025-08-15 14:05:00,652 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 progress 70%: Saving draft information.
+2025-08-15 14:05:00,654 - flask_video_generator - INFO - Draft information has been saved to d:\bluefocus\CapCutAPI\dfd_cat_1755237851_b2c232d0/draft_info.json.
+2025-08-15 14:05:00,654 - flask_video_generator - INFO - Task dfd_cat_1755237851_b2c232d0 completed, draft URL: 
+2025-08-15 14:57:06,405 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 14:58:55,651 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 15:04:29,360 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 15:04:31,203 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755241042_53ac165d, draft_folder=
+2025-08-15 15:04:31,204 - flask_video_generator - INFO - Task dfd_cat_1755241042_53ac165d has been created.
+2025-08-15 15:04:31,204 - flask_video_generator - ERROR - Draft dfd_cat_1755241042_53ac165d does not exist in cache, task dfd_cat_1755241042_53ac165d failed.
+2025-08-15 15:18:05,257 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 15:18:35,227 - flask_video_generator - INFO - Received save draft request: draft_id=dfd_cat_1755241042_53ac165d, draft_folder=
+2025-08-15 15:18:35,227 - flask_video_generator - INFO - Task dfd_cat_1755241042_53ac165d has been created.
+2025-08-15 15:18:35,228 - flask_video_generator - ERROR - Draft dfd_cat_1755241042_53ac165d does not exist in cache, task dfd_cat_1755241042_53ac165d failed.
+2025-08-15 15:18:46,071 - flask_video_generator - WARNING - Draft dfd_cat_1755241042_53ac165d does not exist in cache.
+2025-08-15 15:22:32,840 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 15:23:09,407 - flask_video_generator - INFO - Retrieved draft dfd_cat_1755241042_53ac165d from cache.
+2025-08-15 15:24:10,499 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 15:24:25,194 - flask_video_generator - INFO - Retrieved draft dfd_cat_1755242616_878401fa from cache.
+2025-08-15 15:26:13,597 - flask_video_generator - INFO - Retrieved draft dfd_cat_1755242738_2bcc2e86 from cache.
+2025-08-15 15:26:56,889 - flask_video_generator - INFO - Retrieved draft dfd_cat_1755242738_2bcc2e86 from cache.
+2025-08-15 16:20:45,841 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 16:20:55,071 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 16:24:00,314 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。
+2025-08-15 16:25:23,950 - flask_video_generator - INFO - Flask 应用日志系统初始化完成。

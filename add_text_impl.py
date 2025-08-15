@@ -1,7 +1,7 @@
 import pyJianYingDraft as draft
 from settings.local import IS_CAPCUT_ENV
 from util import generate_draft_url, hex_to_rgb
-from pyJianYingDraft import trange, Font_type
+from pyJianYingDraft import trange, FontType
 from typing import Optional, List  # add List type hint
 from pyJianYingDraft import exceptions
 from create_draft import get_or_create_draft
@@ -103,9 +103,9 @@ def add_text_impl(
     """
     # Validate if font is in Font_type
     try:
-        font_type = getattr(Font_type, font)
+        font_type = getattr(FontType, font)
     except:
-        available_fonts = [attr for attr in dir(Font_type) if not attr.startswith('_')]
+        available_fonts = [attr for attr in dir(FontType) if not attr.startswith('_')]
         raise ValueError(f"Unsupported font: {font}, please use one of the fonts in Font_type: {available_fonts}")
     
     # Validate alpha value range
@@ -238,9 +238,9 @@ def add_text_impl(
     if intro_animation:
         try:
             if IS_CAPCUT_ENV:
-                animation_type = getattr(draft.CapCut_Text_intro, intro_animation)
+                animation_type = getattr(draft.CapCutTextIntro, intro_animation)
             else:
-                animation_type = getattr(draft.Text_intro, intro_animation)
+                animation_type = getattr(draft.TextIntro, intro_animation)
             # Convert seconds to microseconds
             duration_microseconds = int(intro_duration * 1000000)
             text_segment.add_animation(animation_type, duration_microseconds)  # Add intro animation, set duration
@@ -251,9 +251,9 @@ def add_text_impl(
     if outro_animation:
         try:
             if IS_CAPCUT_ENV:
-                animation_type = getattr(draft.CapCut_Text_outro, outro_animation)
+                animation_type = getattr(draft.CapCutTextOutro, outro_animation)
             else:
-                animation_type = getattr(draft.Text_outro, outro_animation)
+                animation_type = getattr(draft.TextOutro, outro_animation)
             # Convert seconds to microseconds
             duration_microseconds = int(outro_duration * 1000000)
             text_segment.add_animation(animation_type, duration_microseconds)  # Add outro animation, set duration
