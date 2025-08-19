@@ -14,7 +14,7 @@ def add_text_impl(
     draft_id: str | None = None,  # Python 3.10+ 新语法
     transform_y: float = -0.8,
     transform_x: float = 0,
-    font: str = "文轩体",
+    font: Optional[str] = None,
     font_color: str = "#ffffff",
     font_size: float = 8.0,
     track_name: str = "text_main",
@@ -102,11 +102,14 @@ def add_text_impl(
     :return: Updated draft information
     """
     # Validate if font is in Font_type
-    try:
-        font_type = getattr(FontType, font)
-    except:
-        available_fonts = [attr for attr in dir(FontType) if not attr.startswith('_')]
-        raise ValueError(f"Unsupported font: {font}, please use one of the fonts in Font_type: {available_fonts}")
+    if font is None:
+        font_type = None
+    else:
+        try:
+            font_type = getattr(FontType, font)
+        except:
+            available_fonts = [attr for attr in dir(FontType) if not attr.startswith('_')]
+            raise ValueError(f"Unsupported font: {font}, please use one of the fonts in Font_type: {available_fonts}")
     
     # Validate alpha value range
     if not 0.0 <= font_alpha <= 1.0:

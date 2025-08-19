@@ -162,7 +162,7 @@ def add_text_impl(text, start, end, font, font_color, font_size, track_name, dra
         
     return make_request("add_text", data)
 
-def add_image_impl(image_url, width, height, start, end, track_name, draft_id=None,
+def add_image_impl(image_url, start, end, width=None, height=None, track_name="image_main", draft_id=None,
                   transform_x=0, transform_y=0, scale_x=1.0, scale_y=1.0, transition=None, transition_duration=None,
                   mask_type=None, mask_center_x=0.0, mask_center_y=0.0, mask_size=0.5,
                   mask_rotation=0.0, mask_feather=0.0, mask_invert=False,

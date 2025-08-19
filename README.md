@@ -1,3 +1,4 @@
+
 # Connect AI generates via CapCutAPI [Try it online](https://www.capcutapi.top)
 
 ## Project Overview
@@ -29,11 +30,14 @@ Enjoy It!  😀😀😀
 
 **Combine AI-generated images and videos using CapCutAPI**
 
+[More](pattern)
+
 [![Airbnb](https://img.youtube.com/vi/1zmQWt13Dx0/hqdefault.jpg)](https://www.youtube.com/watch?v=1zmQWt13Dx0)
 
 [![Horse](https://img.youtube.com/vi/IF1RDFGOtEU/hqdefault.jpg)](https://www.youtube.com/watch?v=IF1RDFGOtEU)
 
 [![Song](https://img.youtube.com/vi/rGNLE_slAJ8/hqdefault.jpg)](https://www.youtube.com/watch?v=rGNLE_slAJ8)
+
 
 </div>
 
@@ -156,7 +160,7 @@ response = requests.post("http://localhost:9001/add_text", json={
     "text": "Welcome to CapCutAPI",
     "start": 0,
     "end": 5,
-    "font": "Source Han Sans",
+    "font": "Source Han Sans",read
     "font_color": "#FFD700",
     "font_size": 48,
     "shadow_enabled": True,
@@ -243,6 +247,10 @@ mcp_client.call_tool("add_text", {
 
 Calling `save_draft` will generate a folder starting with `dfd_` in the current directory of `capcut_server.py`. Copy this to the CapCut/Jianying drafts directory to see the generated draft in the application.
 
+## Pattern
+
+You can find a lot of pattern in the `pattern` directory.
+
 ## Community & Support
 
 We welcome contributions of all forms\! Our iteration rules are:
@@ -280,6 +288,8 @@ If you want to:
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/sun-guannan/CapCutAPI?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/sun-guannan/CapCutAPI?style=flat-square)
 
+
+[![Verified on MSeeP](https://mseep.ai/badge.svg)](https://mseep.ai/app/69c38d28-a97c-4397-849d-c3e3d241b800)
 </div>
 
 *Made with ❤️ by the CapCutAPI Community*
