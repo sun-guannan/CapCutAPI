@@ -166,10 +166,12 @@ class Script_file:
     """视频的宽度, 单位为像素"""
     height: int
     """视频的高度, 单位为像素"""
-    fps: int
+    fps: float
     """视频的帧率"""
     duration: int
     """视频的总时长, 单位为微秒"""
+    name: str
+    """草稿名称"""
 
     materials: Script_material
     """草稿文件中的素材信息部分"""
@@ -197,6 +199,7 @@ class Script_file:
         self.height = height
         self.fps = fps
         self.duration = 0
+        self.name = ""
 
         self.materials = Script_material()
         self.tracks = {}
@@ -226,6 +229,7 @@ class Script_file:
 
         util.assign_attr_with_json(obj, ["fps", "duration"], obj.content)
         util.assign_attr_with_json(obj, ["width", "height"], obj.content["canvas_config"])
+        obj.name = obj.content.get("name", "")
 
         obj.imported_materials = deepcopy(obj.content["materials"])
         obj.imported_tracks = [import_track(track_data, obj.imported_materials) for track_data in obj.content["tracks"]]
@@ -882,11 +886,12 @@ class Script_file:
         self.content["duration"] = self.duration
         self.content["canvas_config"] = {"width": self.width, "height": self.height, "ratio": "original"}
         self.content["materials"] = self.materials.export_json()
+        self.content["name"] = self.name
 
         self.content["last_modified_platform"] = {
             "app_id": 359289,
             "app_source": "cc",
-            "app_version": "6.5.0",
+            "app_version": "5.9.0",
             "device_id": "c4ca4238a0b923820dcc509a6f75849b",
             "hard_disk_id": "307563e0192a94465c0e927fbc482942",
             "mac_address": "c3371f2d4fb02791c067ce44d8fb4ed5",
@@ -897,7 +902,7 @@ class Script_file:
         self.content["platform"] = {
             "app_id": 359289,
             "app_source": "cc",
-            "app_version": "6.5.0",
+            "app_version": "5.9.0",
             "device_id": "c4ca4238a0b923820dcc509a6f75849b",
             "hard_disk_id": "307563e0192a94465c0e927fbc482942",
             "mac_address": "c3371f2d4fb02791c067ce44d8fb4ed5",

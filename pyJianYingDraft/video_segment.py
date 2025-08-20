@@ -8,6 +8,7 @@ from copy import deepcopy
 
 from typing import Optional, Literal, Union
 from typing import Dict, List, Tuple, Any
+from typing import TYPE_CHECKING
 
 from pyJianYingDraft.metadata.capcut_effect_meta import CapCutVideoCharacterEffectType, CapCutVideoSceneEffectType
 from pyJianYingDraft.metadata.capcut_mask_meta import CapCutMaskType
@@ -17,6 +18,8 @@ from .time_util import tim, Timerange
 from .segment import Visual_segment, Clip_settings
 from .local_materials import Video_material
 from .animation import Segment_animations, Video_animation
+if TYPE_CHECKING:
+    from .script_file import Script_file
 
 from .metadata import EffectMeta, EffectParamInstance
 from .metadata import MaskMeta, MaskType, FilterType, TransitionType, CapCutTransitionType

@@ -1,6 +1,6 @@
 import uiautomation as auto
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 class JianYingUIInspector:
     def __init__(self):

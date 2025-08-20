@@ -709,4 +709,4 @@ def download_script(draft_id: str, draft_folder: str = None, script_data: Dict =
 
 if __name__ == "__main__":
     print('hello')
-    download_script("dfd_cat_1751012163_a7e8c315",'/Users/sunguannan/Movies/JianyingPro/User Data/Projects/com.lveditor.draft')
+    download_script("kox_jy_1751012163_a7e8c315",'/Users/sunguannan/Movies/JianyingPro/User Data/Projects/com.lveditor.draft')

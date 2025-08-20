@@ -480,7 +480,7 @@ class Text_segment(Visual_segment):
                 
                 # 如果有阴影设置，添加到样式中
                 if self.shadow and self.shadow.has_shadow:
-                    style_item["shadows"] = [
+                    default_style["shadows"] = [
                         {
                             "diffuse": self.shadow.smoothing / 6,  # diffuse = smoothing/6
                             "angle": self.shadow.angle,

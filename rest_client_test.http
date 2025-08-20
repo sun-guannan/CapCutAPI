@@ -28,6 +28,6 @@ POST http://localhost:9001/save_draft
 Content-Type: application/json
 
 {
-    "draft_id": "dfd_cat_1752912902_0cae2e04",
+    "draft_id": "kox_jy_1752912902_0cae2e04",
     "draft_folder":"/Users/xxx/Movies/JianyingPro/User Data/Projects/com.lveditor.draft/"
 }

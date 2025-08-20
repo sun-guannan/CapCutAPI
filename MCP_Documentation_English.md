@@ -224,7 +224,7 @@ python mcp_server.py
 {
   "success": true,
   "result": {
-    "draft_id": "dfd_cat_xxx",
+    "draft_id": "kox_jy_xxx",
     "draft_url": "https://..."
   },
   "features_used": {

@@ -16,7 +16,6 @@ from pyJianYingDraft.metadata.capcut_effect_meta import CapCutVideoSceneEffectTy
 from dotenv import load_dotenv
 from pathlib import Path
 import logging
-import json
 import os
 from add_audio_track import add_audio_track
 from add_video_track import add_video_track
@@ -27,7 +26,7 @@ from add_video_keyframe_impl import add_video_keyframe_impl
 from save_draft_impl import save_draft_impl, query_task_status, query_script_impl
 from add_effect_impl import add_effect_impl
 from add_sticker_impl import add_sticker_impl
-from create_draft import create_draft
+from create_draft import create_draft, DraftFramerate
 from util import generate_draft_url as utilgenerate_draft_url, hex_to_rgb
 from pyJianYingDraft.text_segment import TextStyleRange, Text_style, Text_border
 
@@ -211,6 +210,8 @@ def create_draft_service():
     # Get parameters
     width = data.get('width', 1080)
     height = data.get('height', 1920)
+    framerate = data.get('framerate', DraftFramerate.FR_30.value)
+    name = data.get('name', "draft")
     
     result = {
         "success": False,
@@ -220,12 +221,12 @@ def create_draft_service():
     
     try:
         # Create new draft
-        script, draft_id = create_draft(width=width, height=height)
+        script, draft_id = create_draft(width=width, height=height, framerate=framerate, name=name)
         
         result["success"] = True
         result["output"] = {
             "draft_id": draft_id,
-            "draft_url": utilgenerate_draft_url(draft_id)
+            # "draft_url": utilgenerate_draft_url(draft_id)
         }
         return jsonify(result)
         
@@ -1450,6 +1451,8 @@ def generate_video_api():
     draft_id = data.get('draft_id')
     resolution = data.get('resolution')
     framerate = data.get('framerate')
+    # Optional higher-priority draft name override
+    override_name = data.get('name')
 
     result = {
         "success": False,
@@ -1473,6 +1476,9 @@ def generate_video_api():
         # Convert script object to dictionary for Celery task
         import json
         draft_content = json.loads(script.dumps())
+        # If a name is provided here, override the draft's name with higher priority
+        if override_name:
+            draft_content['name'] = override_name
 
         # Prepare Celery client for remote task dispatch
         broker_url = os.getenv('CELERY_BROKER_URL') or os.getenv('REDIS_URL')
@@ -1519,10 +1525,21 @@ def generate_video_api():
         while getattr(first_result, 'parent', None) is not None:
             first_result = first_result.parent
 
+        # Try to read unique_dir_name if the process task already finished
+        unique_dir_name = None
+        try:
+            process_task_id = getattr(first_result, 'id', None)
+            if process_task_id:
+                process_async = celery_client.AsyncResult(process_task_id)
+                if process_async.ready() and isinstance(process_async.result, dict):
+                    unique_dir_name = process_async.result.get('unique_dir_name')
+        except Exception:
+            unique_dir_name = None
+
         result["success"] = True
         result["output"] = {
-            "process_task_id": getattr(first_result, 'id', None),
-            "final_task_id": chain_result.id
+            "final_task_id": chain_result.id,
+            "unique_dir_name": unique_dir_name
         }
         return jsonify(result)
 

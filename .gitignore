@@ -16,3 +16,5 @@ config.json
 venv/
 tmp/
 dfd_*
+.env
+.env.prod
