@@ -55,6 +55,10 @@ def add_text_impl(
     fixed_height: float = -1,  # Text fixed height ratio, default -1 means not fixed
     # 多样式文本参数
     text_styles: Optional[List[TextStyleRange]] = None,  # 文本的不同部分的样式列表
+    # 默认全局样式
+    bold: bool | None = None,
+    italic: bool | None = None,
+    underline: bool | None = None,
 ):
     """
     Add text subtitle to the specified draft (configurable parameter version)
@@ -210,6 +214,9 @@ def add_text_impl(
         style=draft.Text_style(
             color=rgb_color,
             size=font_size,
+            bold=bold,
+            italic=italic,
+            underline=underline,
             align=1,
             vertical=vertical,  # Set whether to display vertically
             alpha=font_alpha  # Set transparency

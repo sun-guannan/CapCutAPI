@@ -29,9 +29,9 @@ from .script_file import Script_file
 from .draft_folder import Draft_folder
 
 # 仅在Windows系统下导入jianying_controller
-ISWIN = (sys.platform == 'win32')
-if ISWIN:
-    from .jianying_controller import Jianying_controller, Export_resolution, Export_framerate
+# ISWIN = (sys.platform == 'win32')
+# if ISWIN:
+#     from .jianying_controller import Jianying_controller, Export_resolution, Export_framerate
 
 from .time_util import SEC, tim, trange
 
@@ -90,13 +90,13 @@ __all__ = [
     "trange"
 ]
 
-# 仅在Windows系统下添加jianying_controller相关的导出
-if ISWIN:
-    __all__.extend([
-        "JianyingController",
-        "ExportResolution",
-        "ExportFramerate",
-        "Jianying_controller",
-        "Export_resolution",
-        "Export_framerate",
-    ])
+# # 仅在Windows系统下添加jianying_controller相关的导出
+# if ISWIN:
+#     __all__.extend([
+#         "JianyingController",
+#         "ExportResolution",
+#         "ExportFramerate",
+#         "Jianying_controller",
+#         "Export_resolution",
+#         "Export_framerate",
+#     ])

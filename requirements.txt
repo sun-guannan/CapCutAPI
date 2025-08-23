@@ -4,10 +4,14 @@ flask
 requests
 oss2
 json5
-uiautomation>=2
+# no need for api
+# uiautomation>=2
 celery>=5.3
 python-dotenv>=1.0.0
 # Production WSGI server (Windows and Linux compatible)
 waitress>=3.0.0
 # Optional broker dependencies (choose one)
 redis>=4.5.0
+SQLAlchemy>=2.0
+psycopg2-binary>=2.9
+alembic>=1.13

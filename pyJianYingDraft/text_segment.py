@@ -500,7 +500,7 @@ class Text_segment(Visual_segment):
                 if self.font:
                     default_style["font"] = {
                         "id": self.font.resource_id,
-                        "path": "C:/%s.ttf" % self.font.name
+                        "path": "D:"
                     }
                 
                 # 如果有特效设置，添加到样式中
@@ -674,7 +674,7 @@ class Text_segment(Visual_segment):
             if self.font:
                 style_item["font"] = {
                     "id": self.font.resource_id,
-                    "path": "C:/%s.ttf" % self.font.name  # 并不会真正在此处放置字体文件
+                    "path": "D:" # 并不会真正在此处放置字体文件
                 }
             
             # 如果有特效设置，添加到样式中
