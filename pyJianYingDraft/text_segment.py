@@ -16,6 +16,8 @@ from .animation import Segment_animations, Text_animation
 from .metadata import FontType, EffectMeta
 from .metadata import TextIntro, TextOutro, TextLoopAnim
 
+from .util import len_emoji_as_two
+
 class Text_style:
     """字体样式类"""
 
@@ -595,7 +597,7 @@ class Text_segment(Visual_segment):
                     styles.append(gap_style)
             
             # 检查是否需要在最后一个样式之后添加默认样式
-            if sorted_styles[-1].end < len(self.text):
+            if sorted_styles[-1].end < len_emoji_as_two(self.text):
                 # 添加从最后一个样式结束到文本结尾的默认样式
                 end_style = {
                     "fill": {
@@ -644,7 +646,7 @@ class Text_segment(Visual_segment):
                         }
                     }
                 },
-                "range": [0, len(self.text)],
+                "range": [0, len_emoji_as_two(self.text)],
                 "size": self.style.size,
                 "bold": self.style.bold,
                 "italic": self.style.italic,
