@@ -63,6 +63,10 @@ def add_text():
     outro_animation = data.get('outro_animation')
     outro_duration = data.get('outro_duration', 0.5)
 
+    bold = data.get('bold', None)
+    italic = data.get('italic', None)
+    underline = data.get('underline', None)
+
     text_styles_data = data.get('text_styles', [])
     text_styles = None
     if text_styles_data:
@@ -155,7 +159,10 @@ def add_text():
             height=height,
             fixed_width=fixed_width,
             fixed_height=fixed_height,
-            text_styles=text_styles
+            text_styles=text_styles,
+            bold=bold,
+            italic=italic,
+            underline=underline
         )
 
         result["success"] = True

@@ -291,26 +291,6 @@ def main():
         else:
             print("❌ 获取视频时长失败")
         
-        # 9. 测试保存草稿
-        print("\n💾 测试保存草稿")
-        save_draft_request = {
-            "jsonrpc": "2.0",
-            "id": 9,
-            "method": "tools/call",
-            "params": {
-                "name": "save_draft",
-                "arguments": {
-                    "draft_id": draft_id
-                }
-            }
-        }
-        
-        response = send_request(process, save_draft_request)
-        if response and "result" in response:
-            print("✅ 保存草稿成功")
-        else:
-            print("❌ 保存草稿失败")
-        
         print("\n🎉 所有测试完成！CapCut API MCP服务器功能验证成功！")
         
         print("\n✅ 已验证的功能:")

@@ -102,6 +102,9 @@ def add_text_impl(
     :param outro_duration: Outro animation duration (seconds), default 0.5 seconds
     :param width: Video width (pixels)
     :param height: Video height (pixels)
+    :param bold: Whether to use bold font
+    :param italic: Whether to use italic font
+    :param underline: Whether to use underline font
     :param fixed_width: Text fixed width ratio, range 0.0-1.0, default -1 means not fixed
     :param fixed_height: Text fixed height ratio, range 0.0-1.0, default -1 means not fixed
     :param text_styles: 文本的不同部分的样式列表，每个元素是一个TextStyleRange

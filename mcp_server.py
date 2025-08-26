@@ -233,27 +233,6 @@ TOOLS = [
                 "values": {"type": "array", "description": "批量模式：关键帧值列表"}
             }
         }
-    },
-    {
-        "name": "get_video_duration",
-        "description": "获取视频时长",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "video_url": {"type": "string", "description": "视频URL"}
-            },
-            "required": ["video_url"]
-        }
-    },
-    {
-        "name": "save_draft",
-        "description": "保存草稿",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "draft_id": {"type": "string", "description": "草稿ID"}
-            }
-        }
     }
 ]
 
@@ -307,7 +286,7 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
                 )
                 result = {
                     "draft_id": str(draft_id),
-                    "draft_url": f"https://www.install-ai-guider.top/draft/downloader?draft_id={draft_id}"
+                    "draft_url": ""
                 }
                 
             elif tool_name == "add_video":
