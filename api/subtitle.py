@@ -20,6 +20,7 @@ def add_subtitle():
     italic = data.get('italic', False)
     underline = data.get('underline', False)
     font_color = data.get('font_color', '#FFFFFF')
+    align = data.get('align', 1)
     vertical = data.get('vertical', False)
     alpha = data.get('alpha', 1)
 
@@ -62,6 +63,7 @@ def add_subtitle():
             italic=italic,
             underline=underline,
             font_color=font_color,
+            align=align,
             vertical=vertical,
             alpha=alpha,
             border_alpha=border_alpha,

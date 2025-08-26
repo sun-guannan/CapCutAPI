@@ -15,7 +15,7 @@ def update_cache(key: str, value: draft.Script_file) -> None:
     try:
         # Update Redis storage (persistent)
         redis_storage = get_redis_storage()
-        redis_storage.save_draft(key, value, ttl=86400)  # 24 hours TTL
+        redis_storage.save_draft(key, value)
         
         # Update in-memory cache (fast access)
         if key in DRAFT_CACHE:

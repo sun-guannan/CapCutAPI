@@ -22,6 +22,7 @@ def add_text():
     font_color = data.get('color', data.get('font_color', "#FF0000"))
     font_size = data.get('size', data.get('font_size', 8.0))
     track_name = data.get('track_name', "text_main")
+    align = data.get('align', 1)
     vertical = data.get('vertical', False)
     font_alpha = data.get('alpha', data.get('font_alpha', 1.0))
     outro_animation = data.get('outro_animation', None)
@@ -123,6 +124,7 @@ def add_text():
             font_color=font_color,
             font_size=font_size,
             track_name=track_name,
+            align=align,
             vertical=vertical,
             font_alpha=font_alpha,
             border_alpha=border_alpha,

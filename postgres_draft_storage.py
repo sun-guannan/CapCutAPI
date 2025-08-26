@@ -30,7 +30,7 @@ class PostgresDraftStorage:
             logger.error(f"Failed to initialize database: {e}")
             raise
 
-    def save_draft(self, draft_id: str, script_obj: draft.Script_file, ttl: Optional[int] = None) -> bool:
+    def save_draft(self, draft_id: str, script_obj: draft.Script_file) -> bool:
         try:
             serialized_data = pickle.dumps(script_obj)
 

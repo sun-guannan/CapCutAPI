@@ -69,3 +69,32 @@ def update_task(task_id: str):
     return jsonify({"success": True, "output": {"task_id": task_id}})
 
 
+@bp.route('/tasks/by_draft/<draft_id>', methods=['PATCH'])
+def update_tasks_by_draft(draft_id: str):
+    data: Dict[str, Any] = request.get_json() or {}
+    with get_session() as session:
+        rows = session.execute(select(VideoTask).where(VideoTask.draft_id == draft_id)).scalars().all()
+        if not rows:
+            return jsonify({"success": False, "error": "not_found"}), 404
+
+        allowed = {'status', 'progress', 'message', 'draft_url', 'extra'}
+        updates = {k: v for k, v in data.items() if k in allowed}
+        if not updates:
+            return jsonify({"success": False, "error": "no_valid_fields"}), 400
+
+        for row in rows:
+            for key, value in updates.items():
+                setattr(row, key, value)
+
+        updated_task_ids = [row.task_id for row in rows]
+
+    return jsonify({
+        "success": True,
+        "output": {
+            "updated": len(updated_task_ids),
+            "task_ids": updated_task_ids,
+            "draft_id": draft_id
+        }
+    })
+
+

@@ -18,6 +18,7 @@ def add_text_impl(
     font_color: str = "#ffffff",
     font_size: float = 8.0,
     track_name: str = "text_main",
+    align: int = 1,
     vertical: bool = False,
     font_alpha: float = 1.0,
     # Border parameters
@@ -72,6 +73,7 @@ def add_text_impl(
     :param font_color: Font color #FFF0FF
     :param font_size: Font size (float value, default 8.0)
     :param track_name: Track name
+    :param align: Text alignment (default 1, center, 0 left, 2 right)
     :param vertical: Whether to display vertically (default False)
     :param font_alpha: Text transparency, range 0.0-1.0 (default 1.0, completely opaque)
     :param border_alpha: Border transparency, range 0.0-1.0 (default 1.0)
@@ -217,7 +219,7 @@ def add_text_impl(
             bold=bold,
             italic=italic,
             underline=underline,
-            align=1,
+            align=align,
             vertical=vertical,  # Set whether to display vertically
             alpha=font_alpha  # Set transparency
         ),

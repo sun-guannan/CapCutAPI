@@ -42,6 +42,7 @@ def add_subtitle_impl(
     scale_y: float = 1.0,
     rotation: float = 0.0,
     style_reference: draft.Text_segment = None,
+    align: int = 1,
     vertical: bool = True,  # New parameter: whether to display vertically
     alpha: float = 0.4,
     width: int = 1080,  # New parameter
@@ -56,6 +57,7 @@ def add_subtitle_impl(
     :param text_style: Text style, default is None
     :param clip_settings: Clip settings, default is None
     :param style_reference: Style reference, default is None
+    :param align: Text alignment (default 1, center, 0 left, 2 right)
     :return: Draft information
     """
     # Get or create draft
@@ -119,7 +121,7 @@ def add_subtitle_impl(
         italic=italic,
         underline=underline,
         color=rgb_color,
-        align=1,  # Keep center alignment
+        align=align,  # Keep center alignment
         vertical=vertical,  # Use the passed vertical parameter
         alpha=alpha  # Use the passed alpha parameter
     )

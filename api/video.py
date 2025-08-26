@@ -40,7 +40,6 @@ def add_video():
     mask_rotation = data.get('mask_rotation', 0.0)
     mask_feather = data.get('mask_feather', 0.0)
     mask_invert = data.get('mask_invert', False)
-    mask_rect_height = data.get('mask_rect_height', 1.0)
     mask_rect_width = data.get('mask_rect_width')
     mask_round_corner = data.get('mask_round_corner')
 
@@ -84,7 +83,6 @@ def add_video():
             mask_rotation=mask_rotation,
             mask_feather=mask_feather,
             mask_invert=mask_invert,
-            mask_rect_height=mask_rect_height,
             mask_rect_width=mask_rect_width,
             mask_round_corner=mask_round_corner,
             background_blur=background_blur
