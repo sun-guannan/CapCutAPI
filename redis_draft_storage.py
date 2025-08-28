@@ -21,8 +21,8 @@ class RedisDraftStorage:
         # Kept for backward compat where code might access attribute existence
         self.redis_client = None
 
-    def save_draft(self, draft_id: str, script_obj: draft.Script_file, ttl: Optional[int] = None) -> bool:
-        return self._delegate.save_draft(draft_id, script_obj, ttl)
+    def save_draft(self, draft_id: str, script_obj: draft.Script_file) -> bool:
+        return self._delegate.save_draft(draft_id, script_obj)
 
     def get_draft(self, draft_id: str) -> Optional[draft.Script_file]:
         return self._delegate.get_draft(draft_id)

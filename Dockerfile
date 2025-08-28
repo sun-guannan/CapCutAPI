@@ -18,9 +18,11 @@ ENV PYTHONPATH=/app:$PYTHONPATH
 
 # Copy requirement files first for better caching
 COPY requirements.txt ./
+COPY requirements-mcp.txt ./
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
+    && pip install -r requirements.txt \
+    && pip install -r requirements-mcp.txt
 
 # Copy the rest of the source code
 COPY . .

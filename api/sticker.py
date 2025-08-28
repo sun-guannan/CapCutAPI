@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import requests
 
 from add_sticker_impl import add_sticker_impl
 
@@ -66,3 +67,90 @@ def add_sticker():
         return jsonify(result)
 
 
+
+@bp.route('/search_sticker', methods=['POST'])
+def search_sticker():
+    data = request.get_json() or {}
+
+    keywords = data.get('keywords')
+
+    result = {
+        "error": "",
+        "output": {
+            "data": [],
+            "message": ""
+        },
+        "purchase_link": "",
+        "success": False
+    }
+
+    if not keywords:
+        result["error"] = "Hi, the required parameter 'keywords' is missing. Please add it and try again. "
+        return jsonify(result)
+
+    try:
+        # Call external search API
+        url = "https://lv-api-sinfonlineb.ulikecam.com/artist/v1/effect/search?aid=3704"
+        payload = {
+            "count": 50,
+            "effect_type": 2,
+            "need_recommend": False,
+            "offset": 0,
+            "query": keywords
+        }
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        resp = requests.post(url, json=payload, headers=headers, timeout=10)
+        resp.raise_for_status()
+        body = resp.json() or {}
+
+        ret_code = str(body.get("ret", ""))
+        errmsg = body.get("errmsg", "")
+        data_section = (body.get("data") or {})
+        items = data_section.get("effect_item_list") or []
+
+        mapped_items = []
+        for item in items:
+            common = item.get("common_attr") or {}
+            sticker = item.get("sticker") or {}
+
+            large_image = (sticker.get("large_image") or {})
+            sticker_package = (sticker.get("sticker_package") or {})
+
+            # Determine sticker_id with fallbacks
+            sticker_id = (
+                str(common.get("effect_id") or "")
+                or str(common.get("id") or "")
+                or str(common.get("third_resource_id_str") or "")
+                or (str(common.get("third_resource_id")) if common.get("third_resource_id") is not None else "")
+            )
+
+            mapped_items.append({
+                "sticker": {
+                    "large_image": {
+                        "image_url": large_image.get("image_url", "")
+                    },
+                    "preview_cover": sticker.get("preview_cover", ""),
+                    "sticker_package": {
+                        "height_per_frame": int(sticker_package.get("height_per_frame", 0) or 0),
+                        "size": int(sticker_package.get("size", 0) or 0),
+                        "width_per_frame": int(sticker_package.get("width_per_frame", 0) or 0)
+                    },
+                    "sticker_type": int(sticker.get("sticker_type", 0) or 0),
+                    "track_thumbnail": sticker.get("track_thumbnail", "")
+                },
+                "sticker_id": sticker_id,
+                "title": common.get("title", "")
+            })
+
+        result["output"]["data"] = mapped_items
+        result["output"]["message"] = errmsg or "success"
+        result["success"] = (ret_code == "0")
+        if not result["success"] and not result["error"]:
+            result["error"] = errmsg or "Search failed"
+        return jsonify(result)
+    except Exception as e:
+        result["error"] = f"Error occurred while searching sticker: {str(e)}. "
+        return jsonify(result)
