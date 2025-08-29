@@ -11,9 +11,9 @@ DRAFT_CACHE: Dict[str, 'draft.Script_file'] = OrderedDict()  # Use Dict for type
 MAX_CACHE_SIZE = 100  # Reduced size since Redis is primary storage
 
 def update_cache(key: str, value: draft.Script_file) -> None:
-    """Update cache in both memory and Redis"""
+    """Update cache in both memory and PostgreSQL"""
     try:
-        # Update Redis storage (persistent)
+        # Update PostgreSQL storage (persistent)
         redis_storage = get_redis_storage()
         redis_storage.save_draft(key, value)
         
@@ -28,7 +28,7 @@ def update_cache(key: str, value: draft.Script_file) -> None:
         # Add new item to the end (most recently used)
         DRAFT_CACHE[key] = value
         
-        logger.info(f"Updated draft {key} in both Redis and memory cache")
+        logger.info(f"Updated draft {key} in both PostgreSQL and memory cache")
         
     except Exception as e:
         logger.error(f"Failed to update cache for {key}: {e}")
@@ -40,14 +40,14 @@ def update_cache(key: str, value: draft.Script_file) -> None:
         DRAFT_CACHE[key] = value
 
 def get_from_cache(key: str) -> Optional[draft.Script_file]:
-    """Get draft from cache (memory first, then Redis)"""
+    """Get draft from cache (memory first, then PostgreSQL)"""
     try:
         # Try memory cache first (fastest)
         if key in DRAFT_CACHE:
             logger.debug(f"Retrieved draft {key} from memory cache")
             return DRAFT_CACHE[key]
         
-        # Try Redis cache
+        # Try PostgreSQL cache
         redis_storage = get_redis_storage()
         draft_obj = redis_storage.get_draft(key)
         
@@ -56,7 +56,7 @@ def get_from_cache(key: str) -> Optional[draft.Script_file]:
             if len(DRAFT_CACHE) >= MAX_CACHE_SIZE:
                 DRAFT_CACHE.popitem(last=False)
             DRAFT_CACHE[key] = draft_obj
-            logger.info(f"Retrieved draft {key} from Redis and cached in memory")
+            logger.info(f"Retrieved draft {key} from PostgreSQL and cached in memory")
             return draft_obj
         
         logger.warning(f"Draft {key} not found in any cache")
@@ -68,7 +68,7 @@ def get_from_cache(key: str) -> Optional[draft.Script_file]:
         return DRAFT_CACHE.get(key)
 
 def remove_from_cache(key: str) -> bool:
-    """Remove draft from both memory and Redis cache"""
+    """Remove draft from both memory and PostgreSQL cache"""
     try:
         redis_storage = get_redis_storage()
         redis_removed = redis_storage.delete_draft(key)
@@ -77,7 +77,7 @@ def remove_from_cache(key: str) -> bool:
         if memory_removed:
             DRAFT_CACHE.pop(key)
         
-        logger.info(f"Removed draft {key} from cache (Redis: {redis_removed}, Memory: {memory_removed})")
+        logger.info(f"Removed draft {key} from cache (PostgreSQL: {redis_removed}, Memory: {memory_removed})")
         return redis_removed or memory_removed
         
     except Exception as e:

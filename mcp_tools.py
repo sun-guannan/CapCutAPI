@@ -7,11 +7,10 @@ CapCut API MCP Server (Complete Version)
 
 import sys
 import os
-import json
 import traceback
 import io
 import contextlib
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -27,8 +26,7 @@ try:
     from add_effect_impl import add_effect_impl
     from add_sticker_impl import add_sticker_impl
     from add_video_keyframe_impl import add_video_keyframe_impl
-    from get_duration_impl import get_video_duration
-    from save_draft_impl import save_draft_impl
+    from generate_video_impl import generate_video_impl
     from pyJianYingDraft.text_segment import TextStyleRange
     CAPCUT_AVAILABLE = True
 except ImportError as e:
@@ -44,8 +42,10 @@ TOOLS = [
             "type": "object",
             "properties": {
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
-                "height": {"type": "integer", "default": 1920, "description": "视频高度"}
-            }
+                "height": {"type": "integer", "default": 1920, "description": "视频高度"},
+                "name": {"type": "string", "description": "草稿名称"}
+            },
+            "required": ["width", "height"]
         }
     },
     {
@@ -73,7 +73,7 @@ TOOLS = [
                 "mask_type": {"type": "string", "description": "蒙版类型"},
                 "background_blur": {"type": "integer", "description": "背景模糊级别(1-4)"}
             },
-            "required": ["video_url"]
+            "required": ["video_url", "draft_id"]
         }
     },
     {
@@ -93,7 +93,7 @@ TOOLS = [
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"}
             },
-            "required": ["audio_url"]
+            "required": ["audio_url", "draft_id"]
         }
     },
     {
@@ -118,7 +118,7 @@ TOOLS = [
                 "transition": {"type": "string", "description": "转场类型"},
                 "mask_type": {"type": "string", "description": "蒙版类型"}
             },
-            "required": ["image_url"]
+            "required": ["image_url", "draft_id"]
         }
     },
     {
@@ -145,7 +145,7 @@ TOOLS = [
                 "background_round_radius": {"type": "number", "default": 0.0, "description": "背景圆角半径"},
                 "text_styles": {"type": "array", "description": "文本多样式配置列表"}
             },
-            "required": ["text", "start", "end"]
+            "required": ["text", "start", "end", "draft_id"]
         }
     },
     {
@@ -173,7 +173,7 @@ TOOLS = [
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"}
             },
-            "required": ["srt_path"]
+            "required": ["srt_path", "draft_id"]
         }
     },
     {
@@ -191,7 +191,7 @@ TOOLS = [
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"}
             },
-            "required": ["effect_type"]
+            "required": ["effect_type", "draft_id"]
         }
     },
     {
@@ -214,7 +214,7 @@ TOOLS = [
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"}
             },
-            "required": ["resource_id", "start", "end"]
+            "required": ["resource_id", "start", "end", "draft_id"]
         }
     },
     {
@@ -231,7 +231,22 @@ TOOLS = [
                 "property_types": {"type": "array", "description": "批量模式：关键帧属性类型列表"},
                 "times": {"type": "array", "description": "批量模式：关键帧时间点列表"},
                 "values": {"type": "array", "description": "批量模式：关键帧值列表"}
-            }
+            },
+            "required": ["draft_id", "track_name"]
+        }
+    },
+    {
+        "name": "generate_video",
+        "description": "生成视频",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "draft_id": {"type": "string", "description": "草稿ID"},
+                "resolution": {"type": "string", "description": "分辨率", "default": "1080P"},
+                "framerate": {"type": "string", "description": "帧率", "default": "30fps"},
+                "name": {"type": "string", "description": "视频名称"}
+            },
+            "required": ["draft_id", "resolution", "framerate"]
         }
     }
 ]
@@ -278,7 +293,7 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
             return {"success": False, "error": "CapCut modules not available"}
         
         # 捕获标准输出，防止调试信息干扰
-        with capture_stdout() as captured:
+        with capture_stdout():
             if tool_name == "create_draft":
                 draft_id, script = get_or_create_draft(
                     width=arguments.get("width", 1080),
@@ -318,18 +333,9 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
                 
             elif tool_name == "add_video_keyframe":
                 result = add_video_keyframe_impl(**arguments)
-                
-            elif tool_name == "get_video_duration":
-                duration = get_video_duration(arguments["video_url"])
-                result = {"duration": duration}
-                
-            elif tool_name == "save_draft":
-                save_result = save_draft_impl(**arguments)
-                if isinstance(save_result, dict) and "draft_url" in save_result:
-                    result = {"draft_url": save_result["draft_url"]}
-                else:
-                    result = {"draft_url": f"https://www.install-ai-guider.top/draft/downloader?draft_id=unknown"}
-                
+            elif tool_name == "generate_video":
+                result = generate_video_impl(**arguments)
+
             else:
                 return {"success": False, "error": f"Unknown tool: {tool_name}"}
         

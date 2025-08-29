@@ -1,0 +1,51 @@
+# Use a slim Python base image
+FROM python:3.13-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONIOENCODING=UTF-8
+
+WORKDIR /app
+
+# Set Python path to include the current directory
+ENV PYTHONPATH=/app:$PYTHONPATH
+
+# Install minimal system dependencies for health checks
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy requirement files first for better caching
+COPY requirements.txt ./
+COPY requirements-mcp.txt ./
+
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt \
+    && pip install -r requirements-mcp.txt
+
+# Copy the rest of the source code
+COPY . .
+
+# Copy production environment file (create from .env.prod.example if needed)
+COPY .env.prod* ./
+RUN if [ -f .env.prod ]; then cp .env.prod .env; else echo "Warning: .env.prod not found, using defaults"; fi
+
+# Create logs directory
+RUN mkdir -p logs
+
+# Expose MCP Streamable HTTP port
+EXPOSE 3333
+
+# Health check (POST tools/list to MCP endpoint)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD curl -fsS -X POST -H 'Content-Type: application/json' \
+    --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' \
+    http://localhost:${MCP_PORT:-3333}/mcp > /dev/null || exit 1
+
+# Run standalone FastMCP server
+# MCP_PORT can be overridden at runtime (default 3333)
+CMD ["sh", "-c", "python mcp_stream_server.py --host 0.0.0.0 --port ${MCP_PORT:-3333}"]
+
+
+
