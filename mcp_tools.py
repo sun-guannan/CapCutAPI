@@ -128,6 +128,7 @@ TOOLS = [
             "type": "object",
             "properties": {
                 "text": {"type": "string", "description": "文本内容"},
+                "track_name": {"type": "string", "default": "main", "description": "轨道名称"},
                 "start": {"type": "number", "description": "开始时间（秒）"},
                 "end": {"type": "number", "description": "结束时间（秒）"},
                 "draft_id": {"type": "string", "description": "草稿ID"},
@@ -145,7 +146,7 @@ TOOLS = [
                 "background_round_radius": {"type": "number", "default": 0.0, "description": "背景圆角半径"},
                 "text_styles": {"type": "array", "description": "文本多样式配置列表"}
             },
-            "required": ["text", "start", "end", "draft_id"]
+            "required": ["text", "start", "end", "draft_id", "track_name"]
         }
     },
     {
