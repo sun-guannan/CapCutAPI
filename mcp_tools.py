@@ -44,7 +44,8 @@ TOOLS = [
             "properties": {
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"},
-                "name": {"type": "string", "description": "草稿名称"}
+                "name": {"type": "string", "description": "草稿名称"},
+                "framerate": {"type": "string", "description": "帧率", "enum": ["24.0", "25.0", "30.0", "50.0", "60.0"], "default": "30.0"}
             },
             "required": ["width", "height"]
         }
@@ -320,8 +321,8 @@ TOOLS = [
             "type": "object",
             "properties": {
                 "draft_id": {"type": "string", "description": "草稿ID"},
-                "resolution": {"type": "string", "description": "分辨率（默认720P），可选值480P、720P、1080P、2K、4K", "default": "720P"},
-                "framerate": {"type": "string", "description": "帧率（默认30fps 可选值如24fps、25fps、30fps、50fps、60fps等）", "default": "30fps"},
+                "resolution": {"type": "string", "enum": ["480P", "720P", "1080P", "2K", "4K"], "description": "分辨率（默认720P），可选值480P、720P、1080P、2K、4K", "default": "720P"},
+                "framerate": {"type": "string", "enum": ["24fps", "25fps", "30fps", "50fps", "60fps"], "description": "帧率（默认30fps 可选值如24fps、25fps、30fps、50fps、60fps等）", "default": "30fps"},
                 "name": {"type": "string", "description": "视频名称"}
             },
             "required": ["draft_id"]
