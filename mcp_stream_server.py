@@ -15,6 +15,7 @@ from pathlib import Path
 import logging
 from mcp.server.fastmcp import FastMCP
 import mcp.types as types
+from db import init_db
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -426,18 +427,18 @@ def create_fastmcp_app(host: str = "127.0.0.1", port: int = 3333, path: str = "/
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Streaming-capable MCP server for CapCut API")
-    parser.add_argument("--host", default="127.0.0.1", help="streamable host (default: 127.0.0.1)")
-    parser.add_argument("--port", type=int, default=3333, help="streamable port (default: 3333)")
-    args = parser.parse_args()
+    try:
+        init_db()
+    except Exception as e:
+        logger.error(f"Database initialization failed: {e}")
 
-    app = FastMCP("capcut-api", host=args.host, port=args.port)
+    app = FastMCP("capcut-api", host="127.0.0.1", port=3333)
     _register_tools(app)
     _override_list_tools(app)
     _register_prompts(app)
     _register_resources(app)
 
-    print(f"Starting CapCut FastMCP SSE server on http://{args.host}:{args.port}", file=sys.stderr)
+    print("Starting CapCut FastMCP SSE server on http://127.0.0.1:3333", file=sys.stderr)
     app.run(transport="streamable-http", mount_path="/streamable")
 
 
