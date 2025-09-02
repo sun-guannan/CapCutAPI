@@ -7,7 +7,6 @@ This server reuses the tool registry and execution logic defined in
 which supports stdio and SSE (HTTP) transports.
 """
 
-import argparse
 import sys
 from typing import Any, Dict, Optional, List
 from dotenv import load_dotenv
@@ -32,24 +31,6 @@ if env_file.exists():
 else:
     logger.warning(f"Environment file not found: {env_file}")
     logger.info("Using default environment variables")
-
-
-def _json_type_to_py(type_name: str) -> Any:
-    mapping: Dict[str, Any] = {
-        "string": str,
-        "number": float,
-        "integer": int,
-        "boolean": bool,
-        "array": list[Any],
-        "object": dict[str, Any],
-    }
-    return mapping.get(type_name, Any)
-
-
-def _args_dict() -> Dict[str, Any]:
-    _locals = locals()
-    return {k: v for k, v in _locals.items() if (k not in {"_locals"} and v is not None)}
-
 
 # Manual tool handlers with flattened parameters (required first)
 def tool_create_draft(width: int = 1080, height: int = 1920) -> Dict[str, Any]:
@@ -416,30 +397,31 @@ def _register_resources(app: FastMCP) -> None:
             "language": "zh",
         }"""
 
-def create_fastmcp_app(host: str = "127.0.0.1", port: int = 3333, path: str = "/mcp") -> FastMCP:
-    """Factory to create a FastMCP app with tools registered and list_tools overridden."""
-    app = FastMCP("capcut-api", host=host, port=port, streamable_http_path=path)
-    _register_tools(app)
-    _override_list_tools(app)
-    _register_prompts(app)
-    _register_resources(app)
-    return app
+# def create_fastmcp_app(host: str = "127.0.0.1", port: int = 3333, path: str = "/mcp") -> FastMCP:
+#     """Factory to create a FastMCP app with tools registered and list_tools overridden."""
+#     app = FastMCP("capcut-api", host=host, port=port, streamable_http_path=path)
+#     _register_tools(app)
+#     _override_list_tools(app)
+#     _register_prompts(app)
+#     _register_resources(app)
+#     return app
 
 
 def main() -> None:
     try:
         init_db()
+        logger.info("Database initialization successful")
     except Exception as e:
         logger.error(f"Database initialization failed: {e}")
 
-    app = FastMCP("capcut-api", host="127.0.0.1", port=3333)
+    app = FastMCP("capcut-mcp", host="127.0.0.1", port=3333)
     _register_tools(app)
     _override_list_tools(app)
     _register_prompts(app)
     _register_resources(app)
 
-    print("Starting CapCut FastMCP SSE server on http://127.0.0.1:3333", file=sys.stderr)
-    app.run(transport="streamable-http", mount_path="/streamable")
+    print("Starting CapCut FastMCP streamable-http server on http://127.0.0.1:3333", file=sys.stderr)
+    app.run(transport="streamable-http")
 
 
 if __name__ == "__main__":

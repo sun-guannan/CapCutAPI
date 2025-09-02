@@ -37,15 +37,8 @@ RUN mkdir -p logs
 # Expose MCP Streamable HTTP port
 EXPOSE 3333
 
-# Health check (POST tools/list to MCP endpoint)
-HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-    CMD curl -fsS -X POST -H 'Content-Type: application/json' \
-    --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' \
-    http://localhost:${MCP_PORT:-3333}/mcp > /dev/null || exit 1
-
 # Run standalone FastMCP server
-# MCP_PORT can be overridden at runtime (default 3333)
-CMD ["sh", "-c", "python mcp_stream_server.py --host 0.0.0.0 --port ${MCP_PORT:-3333}"]
+CMD ["sh", "-c", "python mcp_stream_server.py"]
 
 
 
