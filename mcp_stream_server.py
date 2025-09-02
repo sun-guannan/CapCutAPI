@@ -381,11 +381,47 @@ def _override_list_tools(app: FastMCP) -> None:
             )
         return result
 
+def _register_prompts(app: FastMCP) -> None:
+    """Register and implement MCP prompts for FastMCP server."""
+
+    @app.prompt(name="Capcut Quickstart", description="Capcut Quickstart guide")
+    def quickstart(language: Optional[str] = None) -> str:
+        lang = (language or "en").lower()
+        if lang.startswith("zh"):
+            return (
+                "CapCut API 快速开始:\n"
+                "1) 使用 create_draft 创建草稿。\n"
+                "2) 使用 add_video / add_audio / add_image / add_text 添加素材。\n"
+                "3) 使用 add_effect / add_sticker / add_video_keyframe 增强效果。\n"
+                "4) 使用 generate_video 渲染输出。\n"
+                "可用工具请先调用 list_tools 查询输入参数。"
+            )
+        return (
+            "CapCut API Quickstart:\n"
+            "1) Use create_draft to create a project.\n"
+            "2) Add media via add_video / add_audio / add_image / add_text.\n"
+            "3) Enhance with add_effect / add_sticker / add_video_keyframe.\n"
+            "4) Render with generate_video.\n"
+            "Call list_tools to see schemas for each tool."
+        )
+
+def _register_resources(app: FastMCP) -> None:
+    """Register and implement MCP resources for FastMCP server."""
+
+    @app.resource("config://settings", name="Default settings", description="Default settings")
+    def default_settings() -> str:
+        """Get application settings."""
+        return """{
+            "language": "zh",
+        }"""
+
 def create_fastmcp_app(host: str = "127.0.0.1", port: int = 3333, path: str = "/mcp") -> FastMCP:
     """Factory to create a FastMCP app with tools registered and list_tools overridden."""
     app = FastMCP("capcut-api", host=host, port=port, streamable_http_path=path)
     _register_tools(app)
     _override_list_tools(app)
+    _register_prompts(app)
+    _register_resources(app)
     return app
 
 
@@ -398,6 +434,8 @@ def main() -> None:
     app = FastMCP("capcut-api", host=args.host, port=args.port)
     _register_tools(app)
     _override_list_tools(app)
+    _register_prompts(app)
+    _register_resources(app)
 
     print(f"Starting CapCut FastMCP SSE server on http://{args.host}:{args.port}", file=sys.stderr)
     app.run(transport="streamable-http", mount_path="/streamable")
