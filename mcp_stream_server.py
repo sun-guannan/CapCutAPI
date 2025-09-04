@@ -16,6 +16,7 @@ import logging
 from mcp.server.fastmcp import FastMCP
 import mcp.types as types
 from db import init_db
+from add_video_track import add_video_track
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -32,6 +33,7 @@ if env_file.exists():
 else:
     logger.warning(f"Environment file not found: {env_file}")
     logger.info("Using default environment variables")
+
 
 # Manual tool handlers with flattened parameters (required first)
 def tool_create_draft(width: int = 1080, height: int = 1920) -> Dict[str, Any]:
@@ -58,29 +60,39 @@ def tool_add_video(
     transition_duration: float = 0.5,
     mask_type: Optional[str] = None,
     background_blur: Optional[int] = None,
-) -> Dict[str, Any]:
-    arguments: Dict[str, Any] = {
-        "video_url": video_url,
-        "draft_id": draft_id,
-        "start": start,
-        "end": end,
-        "target_start": target_start,
-        "width": width,
-        "height": height,
-        "transform_x": transform_x,
-        "transform_y": transform_y,
-        "scale_x": scale_x,
-        "scale_y": scale_y,
-        "speed": speed,
-        "track_name": track_name,
-        "volume": volume,
-        "transition": transition,
-        "transition_duration": transition_duration,
-        "mask_type": mask_type,
-        "background_blur": background_blur,
-    }
-    arguments = {k: v for k, v in arguments.items() if v is not None}
-    return execute_tool("add_video", arguments)
+    intro_animation: Optional[str] = None,
+    intro_animation_duration: float = 0.5,
+    outro_animation: Optional[str] = None,
+    outro_animation_duration: float = 0.5,
+    combo_animation: Optional[str] = None,
+    combo_animation_duration: float = 0.5,
+) -> Dict[str, str]:
+    return add_video_track(
+        video_url=video_url,
+        draft_id=draft_id,
+        start=start,
+        end=end,
+        target_start=target_start,
+        width=width,
+        height=height,
+        transform_x=transform_x,
+        transform_y=transform_y,
+        scale_x=scale_x,
+        scale_y=scale_y,
+        speed=speed,
+        track_name=track_name,
+        volume=volume,
+        transition=transition,
+        transition_duration=transition_duration,
+        mask_type=mask_type,
+        background_blur=background_blur,
+        intro_animation=intro_animation,
+        intro_animation_duration=intro_animation_duration,
+        outro_animation=outro_animation,
+        outro_animation_duration=outro_animation_duration,
+        combo_animation=combo_animation,
+        combo_animation_duration=combo_animation_duration,
+    )
 
 
 def tool_add_audio(
@@ -335,20 +347,47 @@ def tool_generate_video(
 
 def _register_tools(app: FastMCP) -> None:
     """Register tools with explicit flat-parameter handlers."""
-    app.add_tool(tool_create_draft, name="create_draft", description="创建新的CapCut草稿")
-    app.add_tool(tool_add_video, name="add_video", description="添加视频到草稿，支持转场、蒙版、背景模糊等效果")
-    app.add_tool(tool_add_audio, name="add_audio", description="添加音频到草稿，支持音效处理")
-    app.add_tool(tool_add_image, name="add_image", description="添加图片到草稿，支持动画、转场、蒙版等效果")
-    app.add_tool(tool_add_text, name="add_text", description="添加文本到草稿，支持文本多样式、文字阴影和文字背景")
-    app.add_tool(tool_add_subtitle, name="add_subtitle", description="添加字幕到草稿，支持SRT文件和样式设置")
+    app.add_tool(
+        tool_create_draft, name="create_draft", description="创建新的CapCut草稿"
+    )
+    app.add_tool(
+        tool_add_video,
+        name="add_video",
+        description="添加视频到草稿，支持转场、蒙版、背景模糊等效果",
+    )
+    app.add_tool(
+        tool_add_audio, name="add_audio", description="添加音频到草稿，支持音效处理"
+    )
+    app.add_tool(
+        tool_add_image,
+        name="add_image",
+        description="添加图片到草稿，支持动画、转场、蒙版等效果",
+    )
+    app.add_tool(
+        tool_add_text,
+        name="add_text",
+        description="添加文本到草稿，支持文本多样式、文字阴影和文字背景",
+    )
+    app.add_tool(
+        tool_add_subtitle,
+        name="add_subtitle",
+        description="添加字幕到草稿，支持SRT文件和样式设置",
+    )
     app.add_tool(tool_add_effect, name="add_effect", description="添加特效到草稿")
     app.add_tool(tool_add_sticker, name="add_sticker", description="添加贴纸到草稿")
-    app.add_tool(tool_add_video_keyframe, name="add_video_keyframe", description="添加视频关键帧，支持属性动画")
+    app.add_tool(
+        tool_add_video_keyframe,
+        name="add_video_keyframe",
+        description="添加视频关键帧，支持属性动画",
+    )
     app.add_tool(tool_generate_video, name="generate_video", description="生成渲染视频")
+
 
 def _override_list_tools(app: FastMCP) -> None:
     """Override list_tools to include inputSchema from TOOLS (and optional outputSchema)."""
-    tool_map: Dict[str, Dict[str, Any]] = {t.get("name", ""): t for t in TOOLS if t.get("name")}
+    tool_map: Dict[str, Dict[str, Any]] = {
+        t.get("name", ""): t for t in TOOLS if t.get("name")
+    }
 
     @app._mcp_server.list_tools()  # type: ignore[attr-defined]
     async def list_tools() -> list[types.Tool]:
@@ -363,6 +402,7 @@ def _override_list_tools(app: FastMCP) -> None:
                 )
             )
         return result
+
 
 def _register_prompts(app: FastMCP) -> None:
     """Register and implement MCP prompts for FastMCP server."""
@@ -388,15 +428,19 @@ def _register_prompts(app: FastMCP) -> None:
             "Call list_tools to see schemas for each tool."
         )
 
+
 def _register_resources(app: FastMCP) -> None:
     """Register and implement MCP resources for FastMCP server."""
 
-    @app.resource("config://settings", name="Default settings", description="Default settings")
+    @app.resource(
+        "config://settings", name="Default settings", description="Default settings"
+    )
     def default_settings() -> str:
         """Get application settings."""
         return """{
             "language": "zh",
         }"""
+
 
 # def create_fastmcp_app(host: str = "127.0.0.1", port: int = 3333, path: str = "/mcp") -> FastMCP:
 #     """Factory to create a FastMCP app with tools registered and list_tools overridden."""
@@ -409,9 +453,15 @@ def _register_resources(app: FastMCP) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Streaming-capable MCP server for CapCut API")
-    parser.add_argument("--host", default="127.0.0.1", help="streamable host (default: 127.0.0.1)")
-    parser.add_argument("--port", type=int, default=3333, help="streamable port (default: 3333)")
+    parser = argparse.ArgumentParser(
+        description="Streaming-capable MCP server for CapCut API"
+    )
+    parser.add_argument(
+        "--host", default="127.0.0.1", help="streamable host (default: 127.0.0.1)"
+    )
+    parser.add_argument(
+        "--port", type=int, default=3333, help="streamable port (default: 3333)"
+    )
     args = parser.parse_args()
 
     try:
@@ -420,18 +470,18 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Database initialization failed: {e}")
 
-
     app = FastMCP("capcut-api", host=args.host, port=args.port)
     _register_tools(app)
     _override_list_tools(app)
     _register_prompts(app)
     _register_resources(app)
 
-    print(f"Starting CapCut FastMCP SSE server on http://{args.host}:{args.port}", file=sys.stderr)
+    print(
+        f"Starting CapCut FastMCP SSE server on http://{args.host}:{args.port}",
+        file=sys.stderr,
+    )
     app.run(transport="streamable-http", mount_path="/streamable")
 
 
 if __name__ == "__main__":
     main()
-
-
