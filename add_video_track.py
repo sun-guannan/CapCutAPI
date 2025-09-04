@@ -1,6 +1,5 @@
 import os
 import pyJianYingDraft as draft
-import time
 from settings.local import IS_CAPCUT_ENV
 from util import generate_draft_url, is_windows_path, url_to_hash
 from pyJianYingDraft import trange, Clip_settings
@@ -25,6 +24,12 @@ def add_video_track(
     speed: float = 1.0,
     track_name: str = "main",
     relative_index: int = 0,
+    intro_animation: Optional[str] = None,  # New entrance animation parameter, higher priority than animation
+    intro_animation_duration: float = 0.5,  # New entrance animation duration parameter, default 0.5 seconds
+    outro_animation: Optional[str] = None,  # Exit animation parameter
+    outro_animation_duration: float = 0.5,  # Exit animation duration parameter, default 0.5 seconds
+    combo_animation: Optional[str] = None,  # Combo animation parameter
+    combo_animation_duration: float = 0.5,  # Combo animation duration parameter, default 0.5 seconds
     duration: Optional[float] = None,  # Added duration parameter
     transition: Optional[str] = None,  # Transition type
     transition_duration: Optional[float] = 0.5,  # Transition duration (seconds)
@@ -58,6 +63,12 @@ def add_video_track(
     :param speed: Video playback speed, default 1.0
     :param track_name: When there is only one video, track name can be omitted
     :param relative_index: Track rendering order index, default 0
+    :param intro_animation: New entrance animation parameter, higher priority than animation
+    :param intro_animation_duration: New entrance animation duration (seconds), default 0.5 seconds
+    :param outro_animation: Exit animation parameter
+    :param outro_animation_duration: Exit animation duration (seconds), default 0.5 seconds
+    :param combo_animation: Combo animation parameter
+    :param combo_animation_duration: Combo animation duration (seconds), default 0.5 seconds
     :param duration: Video duration (seconds), if provided, skip duration detection
     :param transition: Transition type, optional parameter
     :param transition_duration: Transition duration (seconds), default uses the default duration of transition type
@@ -171,6 +182,39 @@ def add_video_track(
         ),
         volume=volume
     )
+
+     # Add entrance animation (prioritize intro_animation, then use animation)
+    if intro_animation:
+        try:
+            if IS_CAPCUT_ENV:
+                animation_type = getattr(draft.CapCutIntroType, intro_animation)
+            else:
+                animation_type = getattr(draft.IntroType, intro_animation)
+            video_segment.add_animation(animation_type, intro_animation_duration * 1e6)  # Use microsecond unit for animation duration
+        except AttributeError:
+            raise ValueError(f"Warning: Unsupported entrance animation type {intro_animation}, this parameter will be ignored")
+    
+     # Add exit animation
+    if outro_animation:
+        try:
+            if IS_CAPCUT_ENV:
+                outro_type = getattr(draft.CapCutOutroType, outro_animation)
+            else:
+                outro_type = getattr(draft.OutroType, outro_animation)
+            video_segment.add_animation(outro_type, outro_animation_duration * 1e6)  # Use microsecond unit for animation duration
+        except AttributeError:
+            raise ValueError(f"Warning: Unsupported exit animation type {outro_animation}, this parameter will be ignored")
+
+    # Add combo animation
+    if combo_animation:
+        try:
+            if IS_CAPCUT_ENV:
+                combo_type = getattr(draft.CapCutGroupAnimationType, combo_animation)
+            else:
+                combo_type = getattr(draft.GroupAnimationType, combo_animation)
+            video_segment.add_animation(combo_type, combo_animation_duration * 1e6)  # Use microsecond unit for animation duration
+        except AttributeError:
+            raise ValueError(f"Warning: Unsupported combo animation type {combo_animation}, this parameter will be ignored")
     
     # Add transition effect
     if transition:

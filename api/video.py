@@ -32,7 +32,12 @@ def add_video():
     transition = data.get('transition')
     transition_duration = data.get('transition_duration', 0.5)
     volume = data.get('volume', 1.0)
-
+    intro_animation = data.get('intro_animation')
+    intro_animation_duration = data.get('intro_animation_duration', 0.5)
+    outro_animation = data.get('outro_animation')
+    outro_animation_duration = data.get('outro_animation_duration', 0.5)
+    combo_animation = data.get('combo_animation')
+    combo_animation_duration = data.get('combo_animation_duration', 0.5)
     mask_type = data.get('mask_type')
     mask_center_x = data.get('mask_center_x', 0.5)
     mask_center_y = data.get('mask_center_y', 0.5)
@@ -73,6 +78,12 @@ def add_video():
             track_name=track_name,
             relative_index=relative_index,
             duration=duration,
+            intro_animation=intro_animation,
+            intro_animation_duration=intro_animation_duration,
+            outro_animation=outro_animation,
+            outro_animation_duration=outro_animation_duration,
+            combo_animation=combo_animation,
+            combo_animation_duration=combo_animation_duration,
             transition=transition,
             transition_duration=transition_duration,
             volume=volume,

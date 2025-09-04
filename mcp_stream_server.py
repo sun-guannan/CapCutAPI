@@ -7,6 +7,7 @@ This server reuses the tool registry and execution logic defined in
 which supports stdio and SSE (HTTP) transports.
 """
 
+import argparse
 import sys
 from typing import Any, Dict, Optional, List
 from dotenv import load_dotenv
@@ -408,20 +409,26 @@ def _register_resources(app: FastMCP) -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Streaming-capable MCP server for CapCut API")
+    parser.add_argument("--host", default="127.0.0.1", help="streamable host (default: 127.0.0.1)")
+    parser.add_argument("--port", type=int, default=3333, help="streamable port (default: 3333)")
+    args = parser.parse_args()
+
     try:
         init_db()
         logger.info("Database initialization successful")
     except Exception as e:
         logger.error(f"Database initialization failed: {e}")
 
-    app = FastMCP("capcut-mcp", host="127.0.0.1", port=3333)
+
+    app = FastMCP("capcut-api", host=args.host, port=args.port)
     _register_tools(app)
     _override_list_tools(app)
     _register_prompts(app)
     _register_resources(app)
 
-    print("Starting CapCut FastMCP streamable-http server on http://127.0.0.1:3333", file=sys.stderr)
-    app.run(transport="streamable-http")
+    print(f"Starting CapCut FastMCP SSE server on http://{args.host}:{args.port}", file=sys.stderr)
+    app.run(transport="streamable-http", mount_path="/streamable")
 
 
 if __name__ == "__main__":
