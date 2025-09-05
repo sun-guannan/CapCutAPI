@@ -115,7 +115,7 @@ class Video_material:
 
         # 设置素材名称
         self.material_name = material_name if material_name else os.path.basename(path)
-        self.material_id = uuid.uuid3(uuid.NAMESPACE_DNS, self.material_name).hex
+        self.material_id = uuid.uuid4().hex
         self.replace_path = replace_path
         self.crop_settings = crop_settings
         self.local_material_id = ""
@@ -313,7 +313,7 @@ class Audio_material:
             material_name = f"{name_without_ext}.mp3"  # 使用原始文件名+时间戳+固定mp3扩展名
         
         self.material_name = material_name if material_name else (os.path.basename(path) if path else "unknown")
-        self.material_id = uuid.uuid3(uuid.NAMESPACE_DNS, self.material_name).hex
+        self.material_id = uuid.uuid4().hex
         self.path = path if path else ""
         self.replace_path = replace_path
         self.remote_url = remote_url

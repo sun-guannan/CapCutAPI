@@ -1,5 +1,3 @@
-import sys
-
 from .local_materials import Crop_settings, Video_material, Audio_material
 from .keyframe import Keyframe_property
 

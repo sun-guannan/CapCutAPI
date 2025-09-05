@@ -10,6 +10,7 @@ which supports stdio and SSE (HTTP) transports.
 import argparse
 import sys
 from typing import Any, Dict, Optional, List
+from flask import Flask
 from dotenv import load_dotenv
 from pathlib import Path
 import logging
@@ -17,6 +18,7 @@ from mcp.server.fastmcp import FastMCP
 import mcp.types as types
 from db import init_db
 from add_video_track import add_video_track
+from api.metadata import get_font_types, get_audio_effect_types
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -345,6 +347,28 @@ def tool_generate_video(
     return execute_tool("generate_video", arguments)
 
 
+def tool_get_font_types() -> Dict[str, Any]:
+    """Fetch available font types using the Flask view function."""
+    app = Flask(__name__)
+    with app.app_context():
+        resp = get_font_types()
+        try:
+            return resp.get_json()
+        except Exception as e:
+            return {"success": False, "error": f"Failed to get font types: {e}"}
+
+
+def tool_get_audio_effect_types() -> Dict[str, Any]:
+    """Fetch available audio effect types using the Flask view function."""
+    app = Flask(__name__)
+    with app.app_context():
+        resp = get_audio_effect_types()
+        try:
+            return resp.get_json()
+        except Exception as e:
+            return {"success": False, "error": f"Failed to get audio effect types: {e}"}
+
+
 def _register_tools(app: FastMCP) -> None:
     """Register tools with explicit flat-parameter handlers."""
     app.add_tool(
@@ -381,6 +405,14 @@ def _register_tools(app: FastMCP) -> None:
         description="添加视频关键帧，支持属性动画",
     )
     app.add_tool(tool_generate_video, name="generate_video", description="生成渲染视频")
+    app.add_tool(
+        tool_get_font_types, name="get_font_types", description="获取字体类型列表"
+    )
+    app.add_tool(
+        tool_get_audio_effect_types,
+        name="get_audio_effect_types",
+        description="获取音频特效类型列表",
+    )
 
 
 def _override_list_tools(app: FastMCP) -> None:

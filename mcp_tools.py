@@ -45,7 +45,7 @@ TOOLS = [
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"},
                 "name": {"type": "string", "description": "草稿名称"},
-                "framerate": {"type": "string", "description": "帧率", "enum": ["24.0", "25.0", "30.0", "50.0", "60.0"], "default": "30.0"}
+                "framerate": {"type": "string", "description": "帧率（可选值30.0、50.0、60.0）", "enum": ["30.0", "50.0", "60.0"], "default": "30.0"}
             },
             "required": ["width", "height"]
         }
@@ -61,7 +61,7 @@ TOOLS = [
                 "end": {"type": "number", "default": 0, "description": "视频素材的结束截取时间（秒，0表示截取至视频末尾）"},
                 "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "画布高度"},
-                "draft_id": {"type": "string", "description": "草稿ID（用于关联目标草稿）"},
+                "draft_id": {"type": "string", "description": "草稿ID"},
                 "transform_x": {"type": "number", "default": 0, "description": "X轴位置偏移"},
                 "transform_y": {"type": "number", "default": 0, "description": "Y轴位置偏移"},
                 "scale_x": {"type": "number", "default": 1, "description": "X轴缩放比例"},
@@ -100,14 +100,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "audio_url": {"type": "string", "description": "音频文件URL（必填）"},
-                "draft_id": {"type": "string", "description": "草稿ID（用于指定操作的草稿）"},
-                "start": {"type": "number", "default": 0, "description": "音频素材的起始截取时间（秒，默认0）"},
-                "end": {"type": "number", "description": "音频素材的结束截取时间（秒，可选，默认取完整音频长度）"},
-                "target_start": {"type": "number", "default": 0, "description": "音频在时间线上的起始位置（秒，默认0）"},
-                "volume": {"type": "number", "default": 1.0, "description": "音量大小（默认1.0）"},
-                "speed": {"type": "number", "default": 1.0, "description": "音频速度（默认1.0，>1加速，<1减速）"},
-                "track_name": {"type": "string", "default": "audio_main", "description": "轨道名称（默认\"audio_main\"）"},
+                "audio_url": {"type": "string", "description": "音频文件URL"},
+                "draft_id": {"type": "string", "description": "草稿ID"},
+                "start": {"type": "number", "default": 0, "description": "音频素材的起始截取时间（秒）"},
+                "end": {"type": "number", "description": "音频素材的结束截取时间（秒，默认取完整音频长度）"},
+                "target_start": {"type": "number", "default": 0, "description": "音频在时间线上的起始位置（秒）"},
+                "volume": {"type": "number", "default": 1.0, "description": "音量大小"},
+                "speed": {"type": "number", "default": 1.0, "description": "音频速度（>1加速，<1减速）"},
+                "track_name": {"type": "string", "default": "audio_main", "description": "轨道名称"},
                 "duration": {"type": ["number", "null"], "default": None, "description": "音频素材的总时长（秒），主动设置可以提升请求速度"},
                 "effect_type": {"type": "string", "description": "音效类型"},
                 "effect_params": {"type": "array", "description": "音效参数（可选，根据effect_type设置）"},
@@ -158,38 +158,38 @@ TOOLS = [
     },
     {
         "name": "add_text",
-        "description": "添加文本到草稿，支持文本多样式、阴影、背景与入出场动画",
+        "description": "添加文本到草稿，支持文本多样式、阴影、背景与入出场动画。-艺术字效果可以局中放置在显眼位置 -字幕格式可以挑选正经一点的字体",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "text": {"type": "string", "description": "文本内容（必填，核心显示内容）"},
+                "text": {"type": "string", "description": "文本内容"},
                 "start": {"type": "number", "description": "文本在时间线的起始时间（秒）"},
                 "end": {"type": "number", "description": "文本在时间线的结束时间（秒）"},
-                "draft_id": {"type": "string", "description": "草稿ID（用于关联操作的草稿）"},
-                "transform_y": {"type": "number", "default": -0.8, "description": "Y轴变换参数（默认-0.8）"},
-                "transform_x": {"type": "number", "default": 0, "description": "X轴变换参数（默认0）"},
-                "font": {"type": "string", "description": "字体（默认系统字体）"},
-                "font_color": {"type": "string", "default": "#ffffff", "description": "字体颜色（默认#FFFFFF）"},
-                "font_size": {"type": "number", "default": 8.0, "description": "字体大小（默认8.0）"},
-                "track_name": {"type": "string", "default": "text_main", "description": "轨道名称（默认text_main）"},
-                "align": {"type": "integer", "default": 1, "description": "对齐方式：0左 1中 2右（默认1）"},
-                "vertical": {"type": "boolean", "default": False, "description": "是否垂直显示（默认False）"},
-                "font_alpha": {"type": "number", "default": 1.0, "description": "字体透明度（默认1.0）"},
-                "fixed_width": {"type": "number", "default": -1, "description": "固定宽度比例（默认-1表示不固定）"},
-                "fixed_height": {"type": "number", "default": -1, "description": "固定高度比例（默认-1表示不固定）"},
-                "border_alpha": {"type": "number", "default": 1.0, "description": "描边透明度（默认1.0）"},
-                "border_color": {"type": "string", "default": "#000000", "description": "描边颜色（默认#000000）"},
-                "border_width": {"type": "number", "default": 0.0, "description": "描边宽度（默认0.0）"},
-                "background_color": {"type": "string", "default": "#000000", "description": "背景颜色（默认#000000）"},
-                "background_style": {"type": "integer", "default": 1, "description": "背景样式（默认1）"},
-                "background_alpha": {"type": "number", "default": 0.0, "description": "背景透明度（默认0.0）"},
+                "draft_id": {"type": "string", "description": "草稿ID"},
+                "transform_y": {"type": "number", "default": -0.8, "description": "Y轴变换参数"},
+                "transform_x": {"type": "number", "default": 0, "description": "X轴变换参数"},
+                "font": {"type": "string", "description": "字体"},
+                "font_color": {"type": "string", "default": "#ffffff", "description": "字体颜色"},
+                "font_size": {"type": "number", "default": 8.0, "description": "字体大小"},
+                "track_name": {"type": "string", "default": "text_main", "description": "轨道名称"},
+                "align": {"type": "integer", "default": 1, "description": "对齐方式：0左 1中 2右"},
+                "vertical": {"type": "boolean", "default": False, "description": "是否垂直显示"},
+                "font_alpha": {"type": "number", "default": 1.0, "description": "字体透明度"},
+                "fixed_width": {"type": "number", "default": -1, "description": "固定宽度比例（-1表示不固定）"},
+                "fixed_height": {"type": "number", "default": -1, "description": "固定高度比例（-1表示不固定）"},
+                "border_alpha": {"type": "number", "default": 1.0, "description": "描边透明度"},
+                "border_color": {"type": "string", "default": "#000000", "description": "描边颜色"},
+                "border_width": {"type": "number", "default": 0.0, "description": "描边宽度"},
+                "background_color": {"type": "string", "default": "#000000", "description": "背景颜色"},
+                "background_style": {"type": "integer", "default": 1, "description": "背景样式"},
+                "background_alpha": {"type": "number", "default": 0.0, "description": "背景透明度"},
                 "intro_animation": {"type": "string", "description": "入场动画类型"},
                 "intro_duration": {"type": "number", "default": 0.5, "description": "入场动画持续时间（秒）"},
                 "outro_animation": {"type": "string", "description": "出场动画类型"},
                 "outro_duration": {"type": "number", "default": 0.5, "description": "出场动画持续时间（秒）"},
-                "width": {"type": "integer", "default": 1080, "description": "画布宽度（默认1080）"},
-                "height": {"type": "integer", "default": 1920, "description": "画布高度（默认1920）"},
-                "italic": {"type": "boolean", "default": False, "description": "是否斜体（与bold/underline互斥优先级由实现决定）"},
+                "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
+                "height": {"type": "integer", "default": 1920, "description": "画布高度"},
+                "italic": {"type": "boolean", "default": False, "description": "是否斜体（与bold/underline互斥）"},
                 "bold": {"type": "boolean", "default": False, "description": "是否加粗"},
                 "underline": {"type": "boolean", "default": False, "description": "是否下划线"},
                 "text_styles": {
@@ -264,7 +264,7 @@ TOOLS = [
     },
     {
         "name": "add_effect",
-        "description": "添加特效到草稿",
+        "description": "添加特效到草稿。推荐：5种可以在视频开头使用的特效,冲刺、放大镜、逐渐放大、聚光灯、夸夸弹幕",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -329,11 +329,27 @@ TOOLS = [
             "type": "object",
             "properties": {
                 "draft_id": {"type": "string", "description": "草稿ID"},
-                "resolution": {"type": "string", "enum": ["480P", "720P", "1080P", "2K", "4K"], "description": "分辨率（默认720P），可选值480P、720P、1080P、2K、4K", "default": "720P"},
-                "framerate": {"type": "string", "enum": ["24fps", "25fps", "30fps", "50fps", "60fps"], "description": "帧率（默认30fps 可选值如24fps、25fps、30fps、50fps、60fps等）", "default": "30fps"},
+                "resolution": {"type": "string", "enum": ["1080P", "2K", "4K"], "description": "分辨率（默认1080P），可选值1080P、2K、4K", "default": "1080P"},
+                "framerate": {"type": "string", "enum": ["30fps", "50fps", "60fps"], "description": "帧率（默认30fps 可选值30fps、50fps、60fps）", "default": "30fps"},
                 "name": {"type": "string", "description": "视频名称"}
             },
             "required": ["draft_id"]
+        }
+    },
+    {
+        "name": "get_font_types",
+        "description": "获取字体类型列表",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        }
+    },
+    {
+        "name": "get_audio_effect_types",
+        "description": "获取音频特效类型列表",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
         }
     }
 ]

@@ -12,7 +12,7 @@ CONFIG_FILE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "con
 IS_CAPCUT_ENV = True
 
 # 默认域名配置
-DRAFT_DOMAIN = "https://cornbun.site"
+DRAFT_DOMAIN = "https://ketchup.studio"
 
 # 默认预览路由
 PREVIEW_ROUTER = "/draft/downloader"
