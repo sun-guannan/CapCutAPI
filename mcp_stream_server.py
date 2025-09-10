@@ -19,6 +19,7 @@ import mcp.types as types
 from db import init_db
 from add_video_track import add_video_track
 from api.metadata import get_font_types, get_audio_effect_types
+from add_effect_impl import add_effect_impl
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -252,6 +253,7 @@ def tool_add_subtitle(
 def tool_add_effect(
     effect_type: str,
     draft_id: str,
+    effect_category: str = "scene",
     start: float = 0,
     end: float = 3.0,
     track_name: str = "effect_01",
@@ -259,18 +261,17 @@ def tool_add_effect(
     width: int = 1080,
     height: int = 1920,
 ) -> Dict[str, Any]:
-    arguments: Dict[str, Any] = {
-        "effect_type": effect_type,
-        "draft_id": draft_id,
-        "start": start,
-        "end": end,
-        "track_name": track_name,
-        "params": params,
-        "width": width,
-        "height": height,
-    }
-    arguments = {k: v for k, v in arguments.items() if v is not None}
-    return execute_tool("add_effect", arguments)
+    return add_effect_impl(
+        effect_type=effect_type,
+        effect_category=effect_category,
+        draft_id=draft_id,
+        start=start,
+        end=end,
+        track_name=track_name,
+        params=params,
+        width=width,
+        height=height,
+    )
 
 
 def tool_add_sticker(

@@ -1,13 +1,13 @@
 from pyJianYingDraft import trange, VideoSceneEffectType, VideoCharacterEffectType, CapCutVideoSceneEffectType, CapCutVideoCharacterEffectType, exceptions
 import pyJianYingDraft as draft
-from typing import Optional, Dict, List, Union, Literal
+from typing import Optional, Dict, List, Literal
 from create_draft import get_or_create_draft
 from util import generate_draft_url
 from settings import IS_CAPCUT_ENV
 
 def add_effect_impl(
     effect_type: str,  # Changed to string type
-    effect_category: Literal["scene", "character"],
+    effect_category: Literal["scene", "character"] = "scene",
     start: float = 0,
     end: float = 3.0,
     draft_id: Optional[str] = None,

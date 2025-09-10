@@ -23,7 +23,6 @@ try:
     from add_audio_track import add_audio_track
     from add_image_impl import add_image_impl
     from add_subtitle_impl import add_subtitle_impl
-    from add_effect_impl import add_effect_impl
     from add_sticker_impl import add_sticker_impl
     from add_video_keyframe_impl import add_video_keyframe_impl
     from generate_video_impl import generate_video_impl
@@ -273,10 +272,10 @@ TOOLS = [
                 "end": {"type": "number", "default": 3.0, "description": "特效结束时间（秒）"},
                 "draft_id": {"type": "string", "description": "草稿ID（未传或不存在时可能自动创建新草稿）"},
                 "track_name": {"type": "string", "default": "effect_01", "description": "特效轨道名称"},
-                "params": {"type": "array", "description": "特效参数列表（未提供的参数将使用默认值）"},
+                "params": {"type": "array", "description": "特效参数列表"},
                 "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "画布高度"},
-                "effect_category": {"type": "string", "default": "scene", "description": "特效分类：scene 或 character（默认 scene）"}
+                "effect_category": {"type": "string", "default": "scene", "description": "特效分类：scene 或 character"}
             },
             "required": ["effect_type"]
         }
@@ -470,9 +469,6 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
                 if "srt" in arguments and "srt_path" not in arguments:
                     arguments["srt_path"] = arguments.pop("srt")
                 result = add_subtitle_impl(**arguments)
-                
-            elif tool_name == "add_effect":
-                result = add_effect_impl(**arguments)
                 
             elif tool_name == "add_sticker":
                 result = add_sticker_impl(**arguments)
