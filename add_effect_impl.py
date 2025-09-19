@@ -4,6 +4,7 @@ from typing import Optional, Dict, List, Literal
 from create_draft import get_or_create_draft
 from util import generate_draft_url
 from settings import IS_CAPCUT_ENV
+from draft_cache import update_cache
 
 def add_effect_impl(
     effect_type: str,  # Changed to string type
@@ -47,24 +48,24 @@ def add_effect_impl(
         if effect_category == "scene":
             try:
                 effect_enum = CapCutVideoSceneEffectType[effect_type]
-            except:
+            except Exception:
                 effect_enum = None
         elif effect_category == "character":
             try:
                 effect_enum = CapCutVideoCharacterEffectType[effect_type]
-            except:
+            except Exception:
                 effect_enum = None
     else:
         # Default to using JianYing effects
         if effect_category == "scene":
             try:
                 effect_enum = VideoSceneEffectType[effect_type]
-            except:
+            except Exception:
                 effect_enum = None
         elif effect_category == "character":
             try:
                 effect_enum = VideoCharacterEffectType[effect_type]
-            except:
+            except Exception:
                 effect_enum = None
     
     if effect_enum is None:
@@ -73,7 +74,7 @@ def add_effect_impl(
     # Add effect track (only when track doesn't exist)
     if track_name is not None:
         try:
-            imported_track=script.get_imported_track(draft.Track_type.effect, name=track_name)
+            script.get_imported_track(draft.Track_type.effect, name=track_name)
             # If no exception is thrown, the track already exists
         except exceptions.TrackNotFound:
             # Track doesn't exist, create a new track
@@ -84,7 +85,10 @@ def add_effect_impl(
     # Add effect
     script.add_effect(effect_enum, t_range, params=params[::-1], track_name=track_name)
 
+    # Persist updated script
+    update_cache(draft_id, script)
+
     return {
         "draft_id": draft_id,
-        "draft_url": generate_draft_url(draft_id)
+        # "draft_url": generate_draft_url(draft_id)
     }

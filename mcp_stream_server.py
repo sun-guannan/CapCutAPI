@@ -20,6 +20,7 @@ from db import init_db
 from add_video_track import add_video_track
 from api.metadata import get_font_types, get_audio_effect_types
 from add_effect_impl import add_effect_impl
+from create_draft import get_or_create_draft
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -39,10 +40,11 @@ else:
 
 
 # Manual tool handlers with flattened parameters (required first)
-def tool_create_draft(width: int = 1080, height: int = 1920) -> Dict[str, Any]:
-    arguments = {"width": width, "height": height}
-    return execute_tool("create_draft", arguments)
-
+def tool_create_draft(width: int = 1080, height: int = 1920,framerate: float = 30.0, name: str = "mcp_draft", resource: str = "mcp") -> Dict[str, Any]:
+    draft_id, script =  get_or_create_draft(width=width, height=height, framerate=framerate, name=name, resource=resource)
+    return {
+        "draft_id": draft_id,
+    }
 
 def tool_add_video(
     video_url: str,

@@ -2,11 +2,8 @@ from flask import Flask
 from dotenv import load_dotenv
 from pathlib import Path
 import logging
-from settings.local import PORT
-from api import register_blueprints
-from db import init_db
 
-# Load environment variables from .env file
+# Load environment variables from .env file BEFORE importing modules that may touch DB
 env_file = Path(__file__).parent / ".env"
 logger = logging.getLogger(__name__)
 if not logging.getLogger().hasHandlers():
@@ -18,10 +15,15 @@ else:
     logger.warning(f"Environment file not found: {env_file}")
     logger.info("Using default environment variables")
 
+from settings.local import PORT  # noqa: E402
+from api import register_blueprints  # noqa: E402
+from db import init_db  # noqa: E402
+
 app = Flask(__name__)
 register_blueprints(app)
 try:
     init_db()
+    logger.info("Database initialization successful")
 except Exception as e:
     logger.error(f"Database initialization failed: {e}")
 

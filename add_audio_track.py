@@ -1,13 +1,13 @@
 # 导入必要的模块
 import os
 import pyJianYingDraft as draft
-import time
 from util import generate_draft_url, is_windows_path, url_to_hash
 import re
 from typing import Optional, Dict, Tuple, List
 from pyJianYingDraft import exceptions, AudioSceneEffectType, ToneEffectType, SpeechToSongType, CapCutVoiceFiltersEffectType,CapCutVoiceCharactersEffectType,CapCutSpeechToSongEffectType, trange
 from create_draft import get_or_create_draft
 from settings.local import IS_CAPCUT_ENV
+from draft_cache import update_cache
 
 def add_audio_track(
     audio_url: str,
@@ -48,7 +48,7 @@ def add_audio_track(
     # Add audio track (only when track doesn't exist)
     if track_name is not None:
         try:
-            imported_track = script.get_imported_track(draft.Track_type.audio, name=track_name)
+            script.get_imported_track(draft.Track_type.audio, name=track_name)
             # If no exception is thrown, the track already exists
         except exceptions.TrackNotFound:
             # Track doesn't exist, create a new track
@@ -156,7 +156,10 @@ def add_audio_track(
     # Add audio segment to track
     script.add_segment(audio_segment, track_name=track_name)
     
+    # Persist updated script
+    update_cache(draft_id, script)
+
     return {
         "draft_id": draft_id,
-        "draft_url": generate_draft_url(draft_id)
+        # "draft_url": generate_draft_url(draft_id)
     }

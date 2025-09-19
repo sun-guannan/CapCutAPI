@@ -2,20 +2,20 @@ from collections import OrderedDict
 import pyJianYingDraft as draft
 from typing import Dict, Optional
 import logging
-from redis_draft_storage import get_redis_storage
+from postgres_draft_storage import get_postgres_storage
 
 logger = logging.getLogger(__name__)
 
 # Keep in-memory cache for active drafts (faster access)
 DRAFT_CACHE: Dict[str, 'draft.Script_file'] = OrderedDict()  # Use Dict for type hinting
-MAX_CACHE_SIZE = 100  # Reduced size since Redis is primary storage
+MAX_CACHE_SIZE = 100  # Reduced size since PostgreSQL is primary storage
 
 def update_cache(key: str, value: draft.Script_file) -> None:
     """Update cache in both memory and PostgreSQL"""
     try:
         # Update PostgreSQL storage (persistent)
-        redis_storage = get_redis_storage()
-        redis_storage.save_draft(key, value)
+        pg_storage = get_postgres_storage()
+        pg_storage.save_draft(key, value)
         
         # Update in-memory cache (fast access)
         if key in DRAFT_CACHE:
@@ -48,8 +48,8 @@ def get_from_cache(key: str) -> Optional[draft.Script_file]:
             return DRAFT_CACHE[key]
         
         # Try PostgreSQL cache
-        redis_storage = get_redis_storage()
-        draft_obj = redis_storage.get_draft(key)
+        pg_storage = get_postgres_storage()
+        draft_obj = pg_storage.get_draft(key)
         
         if draft_obj is not None:
             # Add to memory cache for faster future access
@@ -70,15 +70,15 @@ def get_from_cache(key: str) -> Optional[draft.Script_file]:
 def remove_from_cache(key: str) -> bool:
     """Remove draft from both memory and PostgreSQL cache"""
     try:
-        redis_storage = get_redis_storage()
-        redis_removed = redis_storage.delete_draft(key)
+        pg_storage = get_postgres_storage()
+        pg_removed = pg_storage.delete_draft(key)
         
         memory_removed = key in DRAFT_CACHE
         if memory_removed:
             DRAFT_CACHE.pop(key)
         
-        logger.info(f"Removed draft {key} from cache (PostgreSQL: {redis_removed}, Memory: {memory_removed})")
-        return redis_removed or memory_removed
+        logger.info(f"Removed draft {key} from cache (PostgreSQL: {pg_removed}, Memory: {memory_removed})")
+        return pg_removed or memory_removed
         
     except Exception as e:
         logger.error(f"Failed to remove draft {key} from cache: {e}")
@@ -94,8 +94,8 @@ def cache_exists(key: str) -> bool:
         if key in DRAFT_CACHE:
             return True
         
-        redis_storage = get_redis_storage()
-        return redis_storage.exists(key)
+        pg_storage = get_postgres_storage()
+        return pg_storage.exists(key)
         
     except Exception as e:
         logger.error(f"Failed to check if draft {key} exists: {e}")
@@ -104,18 +104,18 @@ def cache_exists(key: str) -> bool:
 def get_cache_stats() -> Dict:
     """Get cache statistics"""
     try:
-        redis_storage = get_redis_storage()
-        redis_stats = redis_storage.get_stats()
+        pg_storage = get_postgres_storage()
+        pg_stats = pg_storage.get_stats()
         
         return {
             'memory_cache_size': len(DRAFT_CACHE),
             'memory_cache_max': MAX_CACHE_SIZE,
-            'redis_stats': redis_stats
+            'postgres_stats': pg_stats
         }
     except Exception as e:
         logger.error(f"Failed to get cache stats: {e}")
         return {
             'memory_cache_size': len(DRAFT_CACHE),
             'memory_cache_max': MAX_CACHE_SIZE,
-            'redis_stats': {}
+            'postgres_stats': {}
         }

@@ -15,6 +15,7 @@ def register_blueprints(app: Flask) -> None:
     from .generate import bp as generate_bp
     from .health import bp as health_bp
     from .tasks import bp as tasks_bp
+    from .draft_management_api import draft_bp as draft_management_bp
 
     # No url_prefix to preserve existing routes
     app.register_blueprint(video_bp)
@@ -29,5 +30,5 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(generate_bp)
     app.register_blueprint(health_bp)
     app.register_blueprint(tasks_bp)
-
+    app.register_blueprint(draft_management_bp)
 

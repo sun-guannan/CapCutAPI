@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from datetime import datetime
 
+from sqlalchemy import text
 from db import get_engine
 
 
@@ -15,7 +16,7 @@ def health_check():
             # Try opening a connection
             eng = get_engine()
             with eng.connect() as conn:
-                conn.execute("SELECT 1")
+                conn.execute(text("SELECT 1"))
             db_status = "healthy"
         except Exception:
             db_status = "unavailable"

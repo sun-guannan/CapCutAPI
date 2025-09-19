@@ -1,5 +1,5 @@
 # Use a slim Python base image
-FROM python:3.13-slim
+FROM python:3.13.7-slim-trixie
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -7,9 +7,6 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8
 
 WORKDIR /app
-
-# Set Python path to include the current directory
-ENV PYTHONPATH=/app:$PYTHONPATH
 
 # Install system dependencies if needed (uncomment if wheels fail)
 # RUN apt-get update && apt-get install -y --no-install-recommends \

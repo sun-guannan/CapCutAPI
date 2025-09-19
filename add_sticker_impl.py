@@ -1,9 +1,10 @@
 import pyJianYingDraft as draft
 from pyJianYingDraft import trange
-from typing import Optional, Dict
+from typing import Dict
 from pyJianYingDraft import exceptions
 from create_draft import get_or_create_draft
 from util import generate_draft_url
+from draft_cache import update_cache
 
 def add_sticker_impl(
     resource_id: str,
@@ -80,7 +81,10 @@ def add_sticker_impl(
     # Add sticker segment to track
     script.add_segment(sticker_segment, track_name=track_name)
 
+    # Persist updated script to PostgreSQL and cache
+    update_cache(draft_id, script)
+
     return {
         "draft_id": draft_id,
-        "draft_url": generate_draft_url(draft_id)
+        # "draft_url": generate_draft_url(draft_id)
     }

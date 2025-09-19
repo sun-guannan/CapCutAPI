@@ -537,10 +537,10 @@ def query_script_impl(draft_id: str, force_update: bool = True):
     :param force_update: Whether to force refresh media metadata, default is True
     :return: Script object
     """
-    # Get draft information from cache (memory first, then Redis)
+    # Get draft information from cache (memory first, then PostgreSQL)
     script = get_from_cache(draft_id)
     if script is None:
-        logger.warning(f"Draft {draft_id} does not exist in cache (memory or Redis).")
+        logger.warning(f"Draft {draft_id} does not exist in cache (memory or PostgreSQL).")
         return None
         
     logger.info(f"Retrieved draft {draft_id} from cache.")

@@ -12,7 +12,7 @@ class DraftFramerate(Enum):
     FR_50 = 50.0
     FR_60 = 60.0
 
-def create_draft(width=1080, height=1920, framerate=DraftFramerate.FR_30.value, name="draft"):
+def create_draft(width=1080, height=1920, framerate=DraftFramerate.FR_30.value, name="draft", resource: str | None = None):
     """
     Create new CapCut draft
     :param width: Video width, default 1080
@@ -25,25 +25,23 @@ def create_draft(width=1080, height=1920, framerate=DraftFramerate.FR_30.value, 
     draft_id = f"kox_jy_{unix_time}_{unique_id}"  # Use Unix timestamp and UUID combination
     
     # Create CapCut draft with specified resolution
-    script = draft.Script_file(width, height, fps=framerate)
-    # Set draft name so it is included in dumps() and sent to Celery later
-    script.name = name or ""
+    script = draft.Script_file(width, height, fps=framerate, name=name, resource=resource)
     
     # Store in global cache
     update_cache(draft_id, script)
     
     return script, draft_id
 
-def get_or_create_draft(draft_id=None, width=1080, height=1920, framerate=DraftFramerate.FR_30.value, name="draft"):
+def get_or_create_draft(draft_id=None, width=1080, height=1920, framerate=DraftFramerate.FR_30.value, name="draft", resource: str | None = None):
     """
-    Get or create CapCut draft (now with Redis persistence)
+    Get or create CapCut draft (now with PostgreSQL persistence)
     :param draft_id: Draft ID, if None or not found in storage, create new draft
     :param width: Video width, default 1080
     :param height: Video height, default 1920
     :return: (draft_id, script)
     """
     if draft_id is not None and cache_exists(draft_id):
-        # Get existing draft from cache (memory or Redis)
+        # Get existing draft from cache (memory or PostgreSQL)
         print(f"Getting draft from storage: {draft_id}")
         script = get_from_cache(draft_id)
         if script is not None:
@@ -60,6 +58,7 @@ def get_or_create_draft(draft_id=None, width=1080, height=1920, framerate=DraftF
         height=height,
         framerate=framerate,
         name=name,
+        resource=resource,
     )
     return generate_draft_id, script
     

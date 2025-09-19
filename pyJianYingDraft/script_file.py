@@ -185,13 +185,14 @@ class Script_file:
 
     TEMPLATE_FILE = "draft_content_template.json"
 
-    def __init__(self, width: int, height: int, fps: int = 30):
+    def __init__(self, width: int, height: int, fps: int = 30, name: str = "draft", resource: str | None = None):
         """创建一个剪映草稿
 
         Args:
             width (int): 视频宽度, 单位为像素
             height (int): 视频高度, 单位为像素
             fps (int, optional): 视频帧率. 默认为30.
+            name (str, optional): 草稿名称. 默认为"draft".
         """
         self.save_path = None
 
@@ -199,7 +200,8 @@ class Script_file:
         self.height = height
         self.fps = fps
         self.duration = 0
-        self.name = ""
+        self.name = name
+        self.resource = resource
 
         self.materials = Script_material()
         self.tracks = {}

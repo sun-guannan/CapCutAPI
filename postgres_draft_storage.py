@@ -3,15 +3,13 @@ PostgreSQL-backed storage for CapCut draft objects.
 Retains a compatible interface with redis_draft_storage.RedisDraftStorage where practical.
 """
 
-import json
 import pickle
 import logging
-import time
 from typing import Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pyJianYingDraft as draft
-from sqlalchemy import select, delete, update
+from sqlalchemy import select, delete
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import get_session, init_db
@@ -48,7 +46,9 @@ class PostgresDraftStorage:
                         fps=getattr(script_obj, 'fps', None),
                         version=getattr(script_obj, 'version', '1.0'),
                         size_bytes=len(serialized_data),
-                        accessed_at=datetime.utcnow(),
+                        draft_name=getattr(script_obj, 'name', None),
+                        resource=getattr(script_obj, 'resource', None),
+                        accessed_at=datetime.now(timezone.utc),
                     )
                     session.add(row)
                 else:
@@ -59,7 +59,9 @@ class PostgresDraftStorage:
                     existing.fps = getattr(script_obj, 'fps', None)
                     existing.version = getattr(script_obj, 'version', '1.0')
                     existing.size_bytes = len(serialized_data)
-                    existing.accessed_at = datetime.utcnow()
+                    existing.draft_name = getattr(script_obj, 'name', None)
+                    existing.resource = getattr(script_obj, 'resource', None)
+                    existing.accessed_at = datetime.now(timezone.utc)
 
             logger.info(f"Successfully saved draft {draft_id} to Postgres (size: {len(serialized_data)} bytes)")
             return True
@@ -79,7 +81,7 @@ class PostgresDraftStorage:
                     logger.warning(f"Draft {draft_id} not found in Postgres")
                     return None
                 script_obj = pickle.loads(row.data)
-                row.accessed_at = datetime.utcnow()
+                row.accessed_at = datetime.now(timezone.utc)
                 return script_obj
         except SQLAlchemyError as e:
             logger.error(f"Database error retrieving draft {draft_id}: {e}")
@@ -115,6 +117,8 @@ class PostgresDraftStorage:
                     return None
                 return {
                     'draft_id': row.draft_id,
+                    'draft_name': row.draft_name,
+                    'resource': row.resource,
                     'width': row.width,
                     'height': row.height,
                     'duration': row.duration,
@@ -140,6 +144,8 @@ class PostgresDraftStorage:
                 for row in rows:
                     results.append({
                         'draft_id': row.draft_id,
+                        'draft_name': row.draft_name,
+                        'resource': row.resource,
                         'width': row.width,
                         'height': row.height,
                         'duration': row.duration,

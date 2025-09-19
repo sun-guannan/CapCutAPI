@@ -1,5 +1,6 @@
 import pyJianYingDraft as draft
 from util import generate_draft_url, hex_to_rgb
+from draft_cache import update_cache
 from create_draft import get_or_create_draft
 from pyJianYingDraft.text_segment import TextBubble, TextEffect
 from typing import Optional
@@ -165,7 +166,10 @@ def add_subtitle_impl(
         effect=text_effect
     )
 
+    # Persist updated script
+    update_cache(draft_id, script)
+
     return {
         "draft_id": draft_id,
-        "draft_url": generate_draft_url(draft_id)
+        # "draft_url": generate_draft_url(draft_id)
     }

@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from create_draft import create_draft, DraftFramerate
 from save_draft_impl import save_draft_impl, query_task_status, query_script_impl
-from util import generate_draft_url as utilgenerate_draft_url
+# from util import generate_draft_url as utilgenerate_draft_url
 
 
 bp = Blueprint('drafts', __name__)
@@ -16,6 +16,7 @@ def create_draft_service():
     height = data.get('height', 1920)
     framerate = data.get('framerate', DraftFramerate.FR_30.value)
     name = data.get('name', "draft")
+    resource = data.get('resource')  # 'api' or 'mcp'
 
     result = {
         "success": False,
@@ -24,7 +25,7 @@ def create_draft_service():
     }
 
     try:
-        script, draft_id = create_draft(width=width, height=height, framerate=framerate, name=name)
+        script, draft_id = create_draft(width=width, height=height, framerate=framerate, name=name, resource=resource)
 
         result["success"] = True
         result["output"] = {"draft_id": draft_id}
@@ -75,7 +76,7 @@ def save_draft():
     data = request.get_json()
 
     draft_id = data.get('draft_id')
-    draft_folder = data.get('draft_folder')
+    draft_folder = data.get('draft_folder')  # noqa: F841
 
     result = {
         "success": False,
@@ -138,7 +139,6 @@ def generate_draft_url():
     data = request.get_json()
 
     draft_id = data.get('draft_id')
-    draft_folder = data.get('draft_folder')
 
     result = {
         "success": False,

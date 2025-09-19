@@ -3,6 +3,7 @@ import pyJianYingDraft as draft
 from settings.local import IS_CAPCUT_ENV
 from util import generate_draft_url, is_windows_path, url_to_hash
 from pyJianYingDraft import trange, Clip_settings
+from draft_cache import update_cache
 import re
 from typing import Optional, Dict
 from pyJianYingDraft import exceptions
@@ -104,7 +105,7 @@ def add_video_track(
     # Add video track (only when track doesn't exist)
     if track_name is not None:
         try:
-            imported_track=script.get_imported_track(draft.Track_type.video, name=track_name)
+            script.get_imported_track(draft.Track_type.video, name=track_name)
             # If no exception is thrown, the track already exists
         except exceptions.TrackNotFound:
             # Track doesn't exist, create new track
@@ -252,7 +253,7 @@ def add_video_track(
                 rect_width=mask_rect_width,
                 round_corner=mask_round_corner
             )
-        except:
+        except Exception:
             raise ValueError(f"Unsupported mask type {mask_type}, supported types include: linear, mirror, circle, rectangle, heart, star")
     
     # Add background blur effect
@@ -278,7 +279,10 @@ def add_video_track(
     # else:
     script.add_segment(video_segment, track_name=track_name)
     
+    # Persist updated script
+    update_cache(draft_id, script)
+
     return {
         "draft_id": draft_id,
-        "draft_url": generate_draft_url(draft_id)
+        # "draft_url": generate_draft_url(draft_id)
     }

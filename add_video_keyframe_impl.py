@@ -2,6 +2,7 @@ import pyJianYingDraft as draft
 from pyJianYingDraft import exceptions
 from create_draft import get_or_create_draft
 from typing import Optional, Dict, List
+from draft_cache import update_cache
 
 from util import generate_draft_url
 
@@ -101,13 +102,16 @@ def add_video_keyframe_impl(
         
         result = {
             "draft_id": draft_id,
-            "draft_url": generate_draft_url(draft_id)
+            # "draft_url": generate_draft_url(draft_id)
         }
         
         # If in batch mode, return the number of added keyframes
         if property_types is not None:
             result["added_keyframes_count"] = added_count
         
+        # Persist updated script
+        update_cache(draft_id, script)
+
         return result
         
     except exceptions.TrackNotFound:

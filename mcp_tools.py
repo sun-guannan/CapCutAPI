@@ -55,7 +55,7 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "video_url": {"type": "string", "description": "视频资源URL（必填，用于获取视频素材）"},
+                "video_url": {"type": "string", "description": "视频资源URL（用于获取视频素材）"},
                 "start": {"type": "number", "default": 0, "description": "视频素材的起始截取时间（秒）"},
                 "end": {"type": "number", "default": 0, "description": "视频素材的结束截取时间（秒，0表示截取至视频末尾）"},
                 "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
@@ -88,7 +88,7 @@ TOOLS = [
                 "mask_invert": {"type": "boolean", "default": False, "description": "是否反转蒙版"},
                 "mask_rect_width": {"type": ["number", "null"], "default": None, "description": "矩形蒙版宽度（仅矩形有效）"},
                 "mask_round_corner": {"type": ["number", "null"], "default": None, "description": "矩形蒙版圆角（0-100，仅矩形有效）"},
-                "background_blur": {"type": "integer", "description": "背景模糊级别(1-4)"}
+                "background_blur": {"type": "integer", "description": "背景模糊级别(数字范围1-4)"}
             },
             "required": ["video_url", "draft_id"]
         }
@@ -109,7 +109,7 @@ TOOLS = [
                 "track_name": {"type": "string", "default": "audio_main", "description": "轨道名称"},
                 "duration": {"type": ["number", "null"], "default": None, "description": "音频素材的总时长（秒），主动设置可以提升请求速度"},
                 "effect_type": {"type": "string", "description": "音效类型"},
-                "effect_params": {"type": "array", "description": "音效参数（可选，根据effect_type设置）"},
+                "effect_params": {"type": "array", "description": "音效参数（根据effect_type设置）"},
                 "width": {"type": "integer", "default": 1080, "description": "视频宽度"},
                 "height": {"type": "integer", "default": 1920, "description": "视频高度"}
             },
@@ -174,7 +174,7 @@ TOOLS = [
                 "align": {"type": "integer", "default": 1, "description": "对齐方式：0左 1中 2右"},
                 "vertical": {"type": "boolean", "default": False, "description": "是否垂直显示"},
                 "font_alpha": {"type": "number", "default": 1.0, "description": "字体透明度"},
-                "fixed_width": {"type": "number", "default": -1, "description": "固定宽度比例（-1表示不固定）"},
+                "fixed_width": {"type": "number", "default": 0.7, "description": "固定宽度比例（-1表示不固定）"},
                 "fixed_height": {"type": "number", "default": -1, "description": "固定高度比例（-1表示不固定）"},
                 "border_alpha": {"type": "number", "default": 1.0, "description": "描边透明度"},
                 "border_color": {"type": "string", "default": "#000000", "description": "描边颜色"},
@@ -191,76 +191,76 @@ TOOLS = [
                 "italic": {"type": "boolean", "default": False, "description": "是否斜体（与bold/underline互斥）"},
                 "bold": {"type": "boolean", "default": False, "description": "是否加粗"},
                 "underline": {"type": "boolean", "default": False, "description": "是否下划线"},
-                "text_styles": {
-                    "type": "array",
-                    "description": "文本多样式配置列表",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "start": {"type": "integer", "description": "开始字符位置（包含）"},
-                            "end": {"type": "integer", "description": "结束字符位置（不包含）"},
-                            "style": {
-                                "type": "object",
-                                "properties": {
-                                    "size": {"type": "number", "description": "字体大小"},
-                                    "bold": {"type": "boolean"},
-                                    "italic": {"type": "boolean"},
-                                    "underline": {"type": "boolean"},
-                                    "color": {"type": "string", "description": "字体颜色#RRGGBB"}
-                                }
-                            },
-                            "border": {
-                                "type": "object",
-                                "properties": {
-                                    "alpha": {"type": "number"},
-                                    "color": {"type": "string"},
-                                    "width": {"type": "number"}
-                                }
-                            },
-                            "font": {"type": "string", "description": "局部字体"}
-                        }
-                    }
-                }
+                # "text_styles": {
+                #     "type": "array",
+                #     "description": "文本多样式配置列表",
+                #     "items": {
+                #         "type": "object",
+                #         "properties": {
+                #             "start": {"type": "integer", "description": "开始字符位置（包含）"},
+                #             "end": {"type": "integer", "description": "结束字符位置（不包含）"},
+                #             "style": {
+                #                 "type": "object",
+                #                 "properties": {
+                #                     "size": {"type": "number", "description": "字体大小"},
+                #                     "bold": {"type": "boolean"},
+                #                     "italic": {"type": "boolean"},
+                #                     "underline": {"type": "boolean"},
+                #                     "color": {"type": "string", "description": "字体颜色#RRGGBB"}
+                #                 }
+                #             },
+                #             "border": {
+                #                 "type": "object",
+                #                 "properties": {
+                #                     "alpha": {"type": "number"},
+                #                     "color": {"type": "string"},
+                #                     "width": {"type": "number"}
+                #                 }
+                #             },
+                #             "font": {"type": "string", "description": "局部字体"}
+                #         }
+                #     }
+                # }
             },
-            "required": ["text", "start", "end"]
+            "required": ["text", "font", "start", "end", "track_name"]
         }
     },
-    {
-        "name": "add_subtitle",
-        "description": "添加字幕到草稿，支持SRT文件和样式设置",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "srt": {"type": "string", "description": "字幕内容或SRT文件URL（支持直接传字幕文本或文件路径/URL）"},
-                "draft_id": {"type": "string", "description": "草稿ID（用于指定要添加字幕的草稿）"},
-                "time_offset": {"type": "number", "default": 0.0, "description": "字幕时间偏移量（秒，可整体调整字幕显示时间）"},
-                "font_size": {"type": "number", "default": 8.0, "description": "字体大小"},
-                "font": {"type": "string", "description": "字体"},
-                "bold": {"type": "boolean", "default": False, "description": "是否加粗"},
-                "italic": {"type": "boolean", "default": False, "description": "是否斜体"},
-                "underline": {"type": "boolean", "default": False, "description": "是否下划线"},
-                "font_color": {"type": "string", "default": "#FFFFFF", "description": "字体颜色（支持十六进制色值）"},
-                "align": {"type": "integer", "default": 1, "description": "对齐方式：0左 1中 2右"},
-                "vertical": {"type": "boolean", "default": False, "description": "是否垂直显示"},
-                "alpha": {"type": "number", "default": 1.0, "description": "字体透明度（范围0-1）"},
-                "border_alpha": {"type": "number", "default": 1.0, "description": "边框透明度"},
-                "border_color": {"type": "string", "default": "#000000", "description": "边框颜色"},
-                "border_width": {"type": "number", "default": 0.0, "description": "边框宽度"},
-                "background_color": {"type": "string", "default": "#000000", "description": "背景颜色"},
-                "background_style": {"type": "integer", "default": 1, "description": "背景样式（需与实现支持的样式匹配）"},
-                "background_alpha": {"type": "number", "default": 0.0, "description": "背景透明度"},
-                "transform_x": {"type": "number", "default": 0.0, "description": "X轴位置偏移"},
-                "transform_y": {"type": "number", "default": -0.8, "description": "Y轴位置偏移"},
-                "scale_x": {"type": "number", "default": 1.0, "description": "X轴缩放比例"},
-                "scale_y": {"type": "number", "default": 1.0, "description": "Y轴缩放比例"},
-                "rotation": {"type": "number", "default": 0.0, "description": "旋转角度（度）"},
-                "track_name": {"type": "string", "default": "subtitle", "description": "轨道名称"},
-                "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
-                "height": {"type": "integer", "default": 1920, "description": "画布高度"}
-            },
-            "required": ["srt"]
-        }
-    },
+    # {
+    #     "name": "add_subtitle",
+    #     "description": "添加字幕到草稿，支持SRT文件和样式设置",
+    #     "inputSchema": {
+    #         "type": "object",
+    #         "properties": {
+    #             "srt": {"type": "string", "description": "字幕内容或SRT文件URL（支持直接传字幕文本或文件路径/URL）"},
+    #             "draft_id": {"type": "string", "description": "草稿ID（用于指定要添加字幕的草稿）"},
+    #             "time_offset": {"type": "number", "default": 0.0, "description": "字幕时间偏移量（秒，可整体调整字幕显示时间）"},
+    #             "font_size": {"type": "number", "default": 8.0, "description": "字体大小"},
+    #             "font": {"type": "string", "description": "字体"},
+    #             "bold": {"type": "boolean", "default": False, "description": "是否加粗"},
+    #             "italic": {"type": "boolean", "default": False, "description": "是否斜体"},
+    #             "underline": {"type": "boolean", "default": False, "description": "是否下划线"},
+    #             "font_color": {"type": "string", "default": "#FFFFFF", "description": "字体颜色（支持十六进制色值）"},
+    #             "align": {"type": "integer", "default": 1, "description": "对齐方式：0左 1中 2右"},
+    #             "vertical": {"type": "boolean", "default": False, "description": "是否垂直显示"},
+    #             "alpha": {"type": "number", "default": 1.0, "description": "字体透明度（范围0-1）"},
+    #             "border_alpha": {"type": "number", "default": 1.0, "description": "边框透明度"},
+    #             "border_color": {"type": "string", "default": "#000000", "description": "边框颜色"},
+    #             "border_width": {"type": "number", "default": 0.0, "description": "边框宽度"},
+    #             "background_color": {"type": "string", "default": "#000000", "description": "背景颜色"},
+    #             "background_style": {"type": "integer", "default": 1, "description": "背景样式（需与实现支持的样式匹配）"},
+    #             "background_alpha": {"type": "number", "default": 0.0, "description": "背景透明度"},
+    #             "transform_x": {"type": "number", "default": 0.0, "description": "X轴位置偏移"},
+    #             "transform_y": {"type": "number", "default": -0.8, "description": "Y轴位置偏移"},
+    #             "scale_x": {"type": "number", "default": 1.0, "description": "X轴缩放比例"},
+    #             "scale_y": {"type": "number", "default": 1.0, "description": "Y轴缩放比例"},
+    #             "rotation": {"type": "number", "default": 0.0, "description": "旋转角度（度）"},
+    #             "track_name": {"type": "string", "default": "subtitle", "description": "轨道名称"},
+    #             "width": {"type": "integer", "default": 1080, "description": "画布宽度"},
+    #             "height": {"type": "integer", "default": 1920, "description": "画布高度"}
+    #         },
+    #         "required": ["srt"]
+    #     }
+    # },
     {
         "name": "add_effect",
         "description": "添加特效到草稿。推荐：5种可以在视频开头使用的特效,冲刺、放大镜、逐渐放大、聚光灯、夸夸弹幕",
@@ -328,8 +328,8 @@ TOOLS = [
             "type": "object",
             "properties": {
                 "draft_id": {"type": "string", "description": "草稿ID"},
-                "resolution": {"type": "string", "enum": ["1080P", "2K", "4K"], "description": "分辨率（默认1080P），可选值1080P、2K、4K", "default": "1080P"},
-                "framerate": {"type": "string", "enum": ["30fps", "50fps", "60fps"], "description": "帧率（默认30fps 可选值30fps、50fps、60fps）", "default": "30fps"},
+                "resolution": {"type": "string", "enum": ["1080P", "2K", "4K"], "description": "分辨率，可选值1080P、2K、4K", "default": "1080P"},
+                "framerate": {"type": "string", "enum": ["30fps", "50fps", "60fps"], "description": "帧率（可选值30fps、50fps、60fps）", "default": "30fps"},
                 "name": {"type": "string", "description": "视频名称"}
             },
             "required": ["draft_id"]
@@ -423,18 +423,8 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
             return {"success": False, "error": "CapCut modules not available"}
         
         # 捕获标准输出，防止调试信息干扰
-        with capture_stdout():
-            if tool_name == "create_draft":
-                draft_id, script = get_or_create_draft(
-                    width=arguments.get("width", 1080),
-                    height=arguments.get("height", 1920)
-                )
-                result = {
-                    "draft_id": str(draft_id),
-                    "draft_url": ""
-                }
-                
-            elif tool_name == "add_video":
+        with capture_stdout():              
+            if tool_name == "add_video":
                 result = add_video_track(**arguments)
                 
             elif tool_name == "add_audio":
@@ -483,12 +473,7 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
         
         return {
             "success": True,
-            "result": result,
-            "features_used": {
-                "shadow": arguments.get("shadow_enabled", False) if tool_name == "add_text" else False,
-                "background": bool(arguments.get("background_color")) if tool_name == "add_text" else False,
-                "multi_style": bool(arguments.get("text_styles")) if tool_name == "add_text" else False
-            }
+            "result": result
         }
         
     except Exception as e:

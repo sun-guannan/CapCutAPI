@@ -1,10 +1,10 @@
 """
-API endpoints for managing drafts stored in Redis.
+API endpoints for managing drafts stored in PostgreSQL.
 Add these endpoints to your Flask application.
 """
 
 from flask import Blueprint, jsonify, request
-from redis_draft_storage import get_redis_storage
+from postgres_draft_storage import get_postgres_storage
 from draft_cache import get_cache_stats, remove_from_cache
 import logging
 
@@ -18,8 +18,8 @@ def list_drafts():
     """List all stored drafts with metadata"""
     try:
         limit = request.args.get('limit', 100, type=int)
-        redis_storage = get_redis_storage()
-        drafts = redis_storage.list_drafts(limit=limit)
+        pg_storage = get_postgres_storage()
+        drafts = pg_storage.list_drafts(limit=limit)
         
         return jsonify({
             'success': True,
@@ -37,8 +37,8 @@ def list_drafts():
 def get_draft_info(draft_id):
     """Get draft metadata without loading the full object"""
     try:
-        redis_storage = get_redis_storage()
-        metadata = redis_storage.get_metadata(draft_id)
+        pg_storage = get_postgres_storage()
+        metadata = pg_storage.get_metadata(draft_id)
         
         if metadata is None:
             return jsonify({
@@ -85,8 +85,8 @@ def delete_draft(draft_id):
 def check_draft_exists(draft_id):
     """Check if a draft exists in storage"""
     try:
-        redis_storage = get_redis_storage()
-        exists = redis_storage.exists(draft_id)
+        pg_storage = get_postgres_storage()
+        exists = pg_storage.exists(draft_id)
         
         return jsonify({
             'success': True,
@@ -120,8 +120,8 @@ def get_storage_stats():
 def cleanup_expired():
     """Clean up expired or orphaned drafts"""
     try:
-        redis_storage = get_redis_storage()
-        cleanup_count = redis_storage.cleanup_expired()
+        pg_storage = get_postgres_storage()
+        cleanup_count = pg_storage.cleanup_expired()
         
         return jsonify({
             'success': True,
@@ -145,8 +145,8 @@ def search_drafts():
         min_duration = request.args.get('min_duration', type=float)
         max_duration = request.args.get('max_duration', type=float)
         
-        redis_storage = get_redis_storage()
-        all_drafts = redis_storage.list_drafts()
+        pg_storage = get_postgres_storage()
+        all_drafts = pg_storage.list_drafts()
         
         # Filter drafts based on criteria
         filtered_drafts = []

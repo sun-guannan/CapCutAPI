@@ -3,9 +3,8 @@ ORM models for Draft and VideoTask.
 """
 
 from datetime import datetime
-from typing import Optional
 
-from sqlalchemy import Column, Integer, String, LargeBinary, Text, DateTime, Float, Boolean
+from sqlalchemy import Column, Integer, String, LargeBinary, Text, DateTime, Float, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
 
 from db import Base
@@ -27,6 +26,9 @@ class Draft(Base):
     fps = Column(Float, nullable=True)
     version = Column(String(64), nullable=True)
     size_bytes = Column(Integer, nullable=True)
+    draft_name = Column(String(255), nullable=True)
+    # Resource origin of the draft: 'api' or 'mcp'
+    resource = Column(SAEnum('api', 'mcp', name='draft_resource'), nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
