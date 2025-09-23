@@ -107,7 +107,7 @@
     "name": "",
     "new_version": "110.0.0",
     "relationships": [],
-    "render_index_track_mode_on": false,
+    "render_index_track_mode_on": true,
     "retouch_cover": null,
     "source": "default",
     "static_cover_image_path": "",
