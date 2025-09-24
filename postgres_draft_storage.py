@@ -9,7 +9,7 @@ from typing import Optional, Dict, Any
 from datetime import datetime, timezone
 
 import pyJianYingDraft as draft
-from sqlalchemy import select, delete
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import get_session, init_db
@@ -33,6 +33,7 @@ class PostgresDraftStorage:
             serialized_data = pickle.dumps(script_obj)
 
             with get_session() as session:
+                # Find any existing row regardless of deletion status
                 q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id))
                 existing = q.scalar_one_or_none()
 
@@ -52,6 +53,7 @@ class PostgresDraftStorage:
                     )
                     session.add(row)
                 else:
+                    # Update in place; if previously soft-deleted, resurrect it
                     existing.data = serialized_data
                     existing.width = getattr(script_obj, 'width', None)
                     existing.height = getattr(script_obj, 'height', None)
@@ -61,6 +63,7 @@ class PostgresDraftStorage:
                     existing.size_bytes = len(serialized_data)
                     existing.draft_name = getattr(script_obj, 'name', None)
                     existing.resource = getattr(script_obj, 'resource', None)
+                    existing.is_deleted = False
                     existing.accessed_at = datetime.now(timezone.utc)
 
             logger.info(f"Successfully saved draft {draft_id} to Postgres (size: {len(serialized_data)} bytes)")
@@ -75,7 +78,7 @@ class PostgresDraftStorage:
     def get_draft(self, draft_id: str) -> Optional[draft.Script_file]:
         try:
             with get_session() as session:
-                q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id))
+                q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id, DraftModel.is_deleted.is_(False)))
                 row = q.scalar_one_or_none()
                 if row is None:
                     logger.warning(f"Draft {draft_id} not found in Postgres")
@@ -93,7 +96,7 @@ class PostgresDraftStorage:
     def exists(self, draft_id: str) -> bool:
         try:
             with get_session() as session:
-                q = session.execute(select(DraftModel.id).where(DraftModel.draft_id == draft_id))
+                q = session.execute(select(DraftModel.id).where(DraftModel.draft_id == draft_id, DraftModel.is_deleted.is_(False)))
                 return q.scalar_one_or_none() is not None
         except Exception as e:
             logger.error(f"Failed to check existence of draft {draft_id}: {e}")
@@ -102,8 +105,13 @@ class PostgresDraftStorage:
     def delete_draft(self, draft_id: str) -> bool:
         try:
             with get_session() as session:
-                result = session.execute(delete(DraftModel).where(DraftModel.draft_id == draft_id))
-                return result.rowcount > 0
+                q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id))
+                row = q.scalar_one_or_none()
+                if row is None:
+                    return False
+                row.is_deleted = True
+                row.updated_at = datetime.now(timezone.utc)
+                return True
         except Exception as e:
             logger.error(f"Failed to delete draft {draft_id}: {e}")
             return False
@@ -111,7 +119,7 @@ class PostgresDraftStorage:
     def get_metadata(self, draft_id: str) -> Optional[Dict[str, Any]]:
         try:
             with get_session() as session:
-                q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id))
+                q = session.execute(select(DraftModel).where(DraftModel.draft_id == draft_id, DraftModel.is_deleted.is_(False)))
                 row = q.scalar_one_or_none()
                 if row is None:
                     return None
@@ -137,7 +145,7 @@ class PostgresDraftStorage:
         try:
             with get_session() as session:
                 q = session.execute(
-                    select(DraftModel).order_by(DraftModel.updated_at.desc()).limit(limit)
+                    select(DraftModel).where(DraftModel.is_deleted.is_(False)).order_by(DraftModel.updated_at.desc()).limit(limit)
                 )
                 rows = q.scalars().all()
                 results = []

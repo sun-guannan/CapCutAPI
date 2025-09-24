@@ -47,6 +47,10 @@ def add_video():
     mask_invert = data.get('mask_invert', False)
     mask_rect_width = data.get('mask_rect_width')
     mask_round_corner = data.get('mask_round_corner')
+    filter_type = data.get('filter_type')
+    filter_intensity = data.get('filter_intensity', 100.0)
+    fade_in_duration = data.get('fade_in_duration', 0.0)
+    fade_out_duration = data.get('fade_out_duration', 0.0)
 
     background_blur = data.get('background_blur')
 
@@ -96,6 +100,10 @@ def add_video():
             mask_invert=mask_invert,
             mask_rect_width=mask_rect_width,
             mask_round_corner=mask_round_corner,
+            filter_type=filter_type,
+            filter_intensity=filter_intensity,
+            fade_in_duration=fade_in_duration,
+            fade_out_duration=fade_out_duration,
             background_blur=background_blur
         )
 

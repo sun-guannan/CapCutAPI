@@ -12,8 +12,8 @@ from . import exceptions
 from .template_mode import EditableTrack, ImportedMediaTrack, ImportedTextTrack, Shrink_mode, Extend_mode, import_track
 from .time_util import Timerange, tim, srt_tstamp
 from .local_materials import Video_material, Audio_material
-from .segment import Base_segment, Speed, Clip_settings
-from .audio_segment import Audio_segment, Audio_fade, Audio_effect
+from .segment import Base_segment, Speed, Clip_settings, AudioFade
+from .audio_segment import Audio_segment, Audio_effect
 from .video_segment import Video_segment, Sticker_segment, Segment_animations, Video_effect, Transition, Filter, BackgroundFilling
 from .effect_segment import Effect_segment, Filter_segment
 from .text_segment import Text_segment, Text_style, TextBubble, Text_border, Text_background, TextEffect
@@ -36,7 +36,7 @@ class Script_material:
 
     audio_effects: List[Audio_effect]
     """音频特效列表"""
-    audio_fades: List[Audio_fade]
+    audio_fades: List[AudioFade]
     """音频淡入淡出效果列表"""
     animations: List[Segment_animations]
     """动画素材列表"""
@@ -74,7 +74,7 @@ class Script_material:
     @overload
     def __contains__(self, item: Union[Video_material, Audio_material]) -> bool: ...
     @overload
-    def __contains__(self, item: Union[Audio_fade, Audio_effect]) -> bool: ...
+    def __contains__(self, item: Union[AudioFade, Audio_effect]) -> bool: ...
     @overload
     def __contains__(self, item: Union[Segment_animations, Video_effect, Transition, Filter]) -> bool: ...
 
@@ -83,7 +83,7 @@ class Script_material:
             return item.material_id in [video.material_id for video in self.videos]
         elif isinstance(item, Audio_material):
             return item.material_id in [audio.material_id for audio in self.audios]
-        elif isinstance(item, Audio_fade):
+        elif isinstance(item, AudioFade):
             return item.fade_id in [fade.fade_id for fade in self.audio_fades]
         elif isinstance(item, Audio_effect):
             return item.effect_id in [effect.effect_id for effect in self.audio_effects]
@@ -365,6 +365,9 @@ class Script_file:
             # 出入场等动画
             if (segment.animations_instance is not None) and (segment.animations_instance not in self.materials):
                 self.materials.animations.append(segment.animations_instance)
+            # 淡入淡出
+            if (segment.fade is not None) and (segment.fade not in self.materials):
+                self.materials.audio_fades.append(segment.fade)
             # 特效
             for effect in segment.effects:
                 if effect not in self.materials:

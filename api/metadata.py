@@ -6,6 +6,7 @@ from pyJianYingDraft.metadata.transition_meta import TransitionType
 from pyJianYingDraft.metadata.capcut_transition_meta import CapCutTransitionType
 from pyJianYingDraft.metadata.mask_meta import MaskType
 from pyJianYingDraft.metadata.capcut_mask_meta import CapCutMaskType
+from pyJianYingDraft.metadata.filter_meta import FilterType
 from pyJianYingDraft.metadata import ToneEffectType, AudioSceneEffectType, SpeechToSongType
 from pyJianYingDraft.metadata.capcut_audio_effect_meta import (
     CapCutVoiceFiltersEffectType,
@@ -119,6 +120,21 @@ def get_mask_types():
     except Exception as e:
         result["success"] = False
         result["error"] = f"Error occurred while getting mask types: {str(e)}"
+        return jsonify(result)
+
+
+@bp.route('/get_filter_types', methods=['GET'])
+def get_filter_types():
+    result = {"success": True, "output": "", "error": ""}
+    try:
+        filter_types = []
+        for name, member in FilterType.__members__.items():
+            filter_types.append({"name": name})
+        result["output"] = filter_types
+        return jsonify(result)
+    except Exception as e:
+        result["success"] = False
+        result["error"] = f"Error occurred while getting filter types: {str(e)}"
         return jsonify(result)
 
 

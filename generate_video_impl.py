@@ -1,5 +1,8 @@
 import os
 import logging
+import uuid
+import threading
+import time
 from typing import Any, Dict, Optional
 
 from save_draft_impl import query_script_impl
@@ -74,11 +77,14 @@ def generate_video_impl(
             queue="default",
         )
 
+        # Pre-generate final task id so we can create a DB record before task starts
+        final_task_id = uuid.uuid4().hex
+
         generate_sig = celery_client.signature(
             "s3_asset_downloader.tasks.generate_video",
             kwargs={"output_path": None, "resolution": resolution, "framerate": framerate},
             queue="default",
-        )
+        ).set(task_id=final_task_id)
 
         chain_result = (process_sig | generate_sig).apply_async()
         logger.info(f"Dispatched Celery chain. Final task id: {chain_result.id}")
@@ -97,7 +103,7 @@ def generate_video_impl(
         except Exception:
             unique_dir_name = None
 
-        final_task_id = chain_result.id
+        # Create task record BEFORE generate task starts
         try:
             with get_session() as session:
                 existing = session.execute(select(VideoTask).where(VideoTask.task_id == final_task_id)).scalar_one_or_none()
@@ -107,11 +113,46 @@ def generate_video_impl(
                             task_id=final_task_id,
                             draft_id=draft_id,
                             status="initialized",
-                            extra={"unique_dir_name": unique_dir_name},
                         )
                     )
         except Exception as e:
-            logger.error(f"Failed to insert video task {final_task_id}: {e}")
+            logger.error(f"Failed to pre-insert video task {final_task_id}: {e}")
+
+        # Update task record with any early metadata (e.g., unique_dir_name) after dispatch
+        try:
+            with get_session() as session:
+                existing = session.execute(select(VideoTask).where(VideoTask.task_id == final_task_id)).scalar_one_or_none()
+                if existing:
+                    extra = dict(existing.extra or {})
+                    if unique_dir_name:
+                        extra["unique_dir_name"] = unique_dir_name
+                    existing.extra = extra
+        except Exception as e:
+            logger.error(f"Failed to update video task {final_task_id} metadata: {e}")
+
+        # Start a background watcher to mark status on completion
+        def _watch_and_update_status(task_id: str):
+            try:
+                async_res = celery_client.AsyncResult(task_id)
+                while not async_res.ready():
+                    time.sleep(1.0)
+                state = async_res.state
+                with get_session() as session:
+                    row = session.execute(select(VideoTask).where(VideoTask.task_id == task_id)).scalar_one_or_none()
+                    if not row:
+                        return
+                    if state == "SUCCESS":
+                        row.status = "completed"
+                    elif state in ("FAILURE", "REVOKED"):
+                        row.status = "failed"
+                        try:
+                            row.message = str(async_res.result)
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.error(f"Task status watcher error for {task_id}: {e}")
+
+        threading.Thread(target=_watch_and_update_status, args=(final_task_id,), daemon=True).start()
 
         result["success"] = True
         result["output"] = {"final_task_id": final_task_id, "unique_dir_name": unique_dir_name}

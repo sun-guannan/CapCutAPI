@@ -34,6 +34,10 @@ def add_video_track(
     duration: Optional[float] = None,  # Added duration parameter
     transition: Optional[str] = None,  # Transition type
     transition_duration: Optional[float] = 0.5,  # Transition duration (seconds)
+    filter_type: Optional[str] = None,  # Filter type
+    filter_intensity: float = 100.0,  # Filter intensity
+    fade_in_duration: float = 0.0,  # Fade in duration (seconds)
+    fade_out_duration: float = 0.0,  # Fade out duration (seconds)
     # Mask related parameters
     mask_type: Optional[str] = None,  # Mask type
     mask_center_x: float = 0.5,  # Mask center X coordinate (0-1)
@@ -73,6 +77,10 @@ def add_video_track(
     :param duration: Video duration (seconds), if provided, skip duration detection
     :param transition: Transition type, optional parameter
     :param transition_duration: Transition duration (seconds), default uses the default duration of transition type
+    :param filter_type: Filter type, optional parameter
+    :param filter_intensity: Filter intensity, default 100.0
+    :param fade_in_duration: Fade in duration (seconds), default 0.0
+    :param fade_out_duration: Fade out duration (seconds), default 0.0
     :param mask_type: Mask type (linear, mirror, circle, rectangle, heart, star), optional parameter
     :param mask_center_x: Mask center X coordinate (0-1), default 0.5
     :param mask_center_y: Mask center Y coordinate (0-1), default 0.5
@@ -234,6 +242,11 @@ def add_video_track(
         except AttributeError:
             raise ValueError(f"Unsupported transition type: {transition}, transition setting skipped")
     
+
+    # Add fade effect
+    if fade_in_duration > 0 or fade_out_duration > 0:
+        video_segment.add_fade(fade_in_duration, fade_out_duration)
+
     # Add mask effect
     if mask_type:
         try:
@@ -255,6 +268,14 @@ def add_video_track(
             )
         except Exception:
             raise ValueError(f"Unsupported mask type {mask_type}, supported types include: linear, mirror, circle, rectangle, heart, star")
+    
+    # Add filter effect
+    if filter_type:
+        try:
+            filter_type_enum = getattr(draft.FilterType, filter_type)
+            video_segment.add_filter(filter_type_enum, filter_intensity)
+        except Exception:
+            raise ValueError(f"Unsupported filter type {filter_type}, supported types include: linear, mirror, circle, rectangle, heart, star")
     
     # Add background blur effect
     if background_blur is not None:

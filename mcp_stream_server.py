@@ -18,6 +18,7 @@ from mcp.server.fastmcp import FastMCP
 import mcp.types as types
 from db import init_db
 from add_video_track import add_video_track
+from add_text_impl import add_text_impl
 from api.metadata import get_font_types, get_audio_effect_types
 from add_effect_impl import add_effect_impl
 from create_draft import get_or_create_draft
@@ -171,8 +172,15 @@ def tool_add_text(
     start: float,
     end: float,
     draft_id: str,
+    transform_y: float = -0.8,
+    transform_x: float = 0,
+    track_name: str = "text_main",
+    font: Optional[str] = None,
     font_color: str = "#ffffff",
     font_size: int = 24,
+    align: int = 1,
+    vertical: bool = False,
+    font_alpha: float = 1.0,
     shadow_enabled: bool = False,
     shadow_color: str = "#000000",
     shadow_alpha: float = 0.8,
@@ -185,27 +193,32 @@ def tool_add_text(
     background_round_radius: float = 0.0,
     text_styles: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
-    arguments: Dict[str, Any] = {
-        "text": text,
-        "start": start,
-        "end": end,
-        "draft_id": draft_id,
-        "font_color": font_color,
-        "font_size": font_size,
-        "shadow_enabled": shadow_enabled,
-        "shadow_color": shadow_color,
-        "shadow_alpha": shadow_alpha,
-        "shadow_angle": shadow_angle,
-        "shadow_distance": shadow_distance,
-        "shadow_smoothing": shadow_smoothing,
-        "background_color": background_color,
-        "background_alpha": background_alpha,
-        "background_style": background_style,
-        "background_round_radius": background_round_radius,
-        "text_styles": text_styles,
-    }
-    arguments = {k: v for k, v in arguments.items() if v is not None}
-    return execute_tool("add_text", arguments)
+    return add_text_impl(
+        text=text,
+        start=start,
+        end=end,
+        draft_id=draft_id,
+        font=font,
+        font_color=font_color,
+        font_size=font_size,
+        track_name=track_name,
+        align=align,
+        vertical=vertical,
+        transform_y=transform_y,
+        transform_x=transform_x,
+        font_alpha=font_alpha,
+        shadow_enabled=shadow_enabled,
+        shadow_color=shadow_color,
+        shadow_alpha=shadow_alpha,
+        shadow_angle=shadow_angle,
+        shadow_distance=shadow_distance,
+        shadow_smoothing=shadow_smoothing,
+        background_color=background_color,
+        background_alpha=background_alpha,
+        background_style=background_style,
+        background_round_radius=background_round_radius,
+        text_styles=text_styles,
+    )
 
 
 def tool_add_subtitle(

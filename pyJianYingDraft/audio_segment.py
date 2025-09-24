@@ -12,39 +12,12 @@ from typing import Dict, List, Any
 from pyJianYingDraft.metadata.capcut_audio_effect_meta import CapCutSpeechToSongEffectType, CapCutVoiceCharactersEffectType, CapCutVoiceFiltersEffectType
 
 from .time_util import tim, Timerange
-from .segment import Media_segment
+from .segment import Media_segment, AudioFade
 from .local_materials import Audio_material
 from .keyframe import Keyframe_property, Keyframe_list
 
 from .metadata import EffectParamInstance
 from .metadata import AudioSceneEffectType, ToneEffectType, SpeechToSongType
-
-class Audio_fade:
-    """音频淡入淡出效果"""
-
-    fade_id: str
-    """淡入淡出效果的全局id, 自动生成"""
-
-    in_duration: int
-    """淡入时长, 单位为微秒"""
-    out_duration: int
-    """淡出时长, 单位为微秒"""
-
-    def __init__(self, in_duration: int, out_duration: int):
-        """根据给定的淡入/淡出时长构造一个淡入淡出效果"""
-
-        self.fade_id = uuid.uuid4().hex
-        self.in_duration = in_duration
-        self.out_duration = out_duration
-
-    def export_json(self) -> Dict[str, Any]:
-        return {
-            "id": self.fade_id,
-            "fade_in_duration": self.in_duration,
-            "fade_out_duration": self.out_duration,
-            "fade_type": 0,
-            "type": "audio_fade"
-        }
 
 class Audio_effect:
     """音频特效对象"""
@@ -116,7 +89,7 @@ class Audio_segment(Media_segment):
     material_instance: Audio_material
     """音频素材实例"""
 
-    fade: Optional[Audio_fade]
+    fade: Optional[AudioFade]
     """音频淡入淡出效果, 可能为空
 
     在放入轨道时自动添加到素材列表中
@@ -202,7 +175,7 @@ class Audio_segment(Media_segment):
         if isinstance(in_duration, str): in_duration = tim(in_duration)
         if isinstance(out_duration, str): out_duration = tim(out_duration)
 
-        self.fade = Audio_fade(in_duration, out_duration)
+        self.fade = AudioFade(in_duration, out_duration)
         self.extra_material_refs.append(self.fade.fade_id)
 
         return self

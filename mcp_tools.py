@@ -17,9 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # 导入CapCut API功能
 try:
-    from create_draft import get_or_create_draft
     from add_text_impl import add_text_impl
-    from add_video_track import add_video_track
     from add_audio_track import add_audio_track
     from add_image_impl import add_image_impl
     from add_subtitle_impl import add_subtitle_impl
@@ -79,6 +77,10 @@ TOOLS = [
                 "transition": {"type": "string", "description": "转场类型（需与支持的类型匹配）"},
                 "transition_duration": {"type": "number", "default": 0.5, "description": "转场持续时间（秒）"},
                 "volume": {"type": "number", "default": 1.0, "description": "视频音量（0.0-1.0）"},
+                "filter_type": {"type": "string", "description": "滤镜类型（需与支持的类型匹配）"},
+                "filter_intensity": {"type": "number", "default": 100.0, "description": "滤镜强度（0-100）"},
+                "fade_in_duration": {"type": "number", "default": 0.0, "description": "音频淡入时长（秒）"},
+                "fade_out_duration": {"type": "number", "default": 0.0, "description": "音频淡出时长（秒）"},
                 "mask_type": {"type": "string", "description": "蒙版类型（如圆形、矩形等）"},
                 "mask_center_x": {"type": "number", "default": 0.5, "description": "蒙版中心X坐标（0-1）"},
                 "mask_center_y": {"type": "number", "default": 0.5, "description": "蒙版中心Y坐标（0-1）"},
@@ -182,6 +184,17 @@ TOOLS = [
                 "background_color": {"type": "string", "default": "#000000", "description": "背景颜色"},
                 "background_style": {"type": "integer", "default": 1, "description": "背景样式"},
                 "background_alpha": {"type": "number", "default": 0.0, "description": "背景透明度"},
+                "background_round_radius": {"type": "number", "default": 0.0, "description": "背景圆角半径"},
+                "background_height": {"type": "number", "default": 0.14, "description": "背景高度"},
+                "background_width": {"type": "number", "default": 0.14, "description": "背景宽度"},
+                "background_horizontal_offset": {"type": "number", "default": 0.5, "description": "背景水平偏移"},
+                "background_vertical_offset": {"type": "number", "default": 0.5, "description": "背景垂直偏移"},
+                "shadow_enabled": {"type": "boolean", "default": False, "description": "是否启用阴影"},
+                "shadow_alpha": {"type": "number", "default": 0.9, "description": "阴影透明度"},
+                "shadow_angle": {"type": "number", "default": -45.0, "description": "阴影角度"},
+                "shadow_color": {"type": "string", "default": "#000000", "description": "阴影颜色"},
+                "shadow_distance": {"type": "number", "default": 5.0, "description": "阴影距离"},
+                "shadow_smoothing": {"type": "number", "default": 0.15, "description": "阴影平滑度"},
                 "intro_animation": {"type": "string", "description": "入场动画类型"},
                 "intro_duration": {"type": "number", "default": 0.5, "description": "入场动画持续时间（秒）"},
                 "outro_animation": {"type": "string", "description": "出场动画类型"},
@@ -423,11 +436,8 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
             return {"success": False, "error": "CapCut modules not available"}
         
         # 捕获标准输出，防止调试信息干扰
-        with capture_stdout():              
-            if tool_name == "add_video":
-                result = add_video_track(**arguments)
-                
-            elif tool_name == "add_audio":
+        with capture_stdout():                          
+            if tool_name == "add_audio":
                 # 将 effect_type/effect_params 映射为实现所需的 sound_effects
                 effect_type = arguments.pop("effect_type", None)
                 effect_params = arguments.pop("effect_params", None)
@@ -444,16 +454,7 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
                 
             elif tool_name == "add_image":
                 result = add_image_impl(**arguments)
-                
-            elif tool_name == "add_text":
-                # 处理text_styles参数
-                text_styles_converted = None
-                if "text_styles" in arguments and arguments["text_styles"]:
-                    text_styles_converted = convert_text_styles(arguments["text_styles"])
-                    arguments["text_styles"] = text_styles_converted
-                
-                result = add_text_impl(**arguments)
-                
+
             elif tool_name == "add_subtitle":
                 # 兼容字段：将 srt 映射为实现参数 srt_path
                 if "srt" in arguments and "srt_path" not in arguments:
