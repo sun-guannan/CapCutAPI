@@ -22,6 +22,7 @@ from add_text_impl import add_text_impl
 from api.metadata import get_font_types, get_audio_effect_types
 from add_effect_impl import add_effect_impl
 from create_draft import get_or_create_draft
+from generate_video_impl import generate_video_impl
 # pydantic is intentionally not required here for flat handlers
 
 # Reuse tool schemas and executor from the existing implementation
@@ -360,7 +361,7 @@ def tool_generate_video(
         "name": name,
     }
     arguments = {k: v for k, v in arguments.items() if v is not None}
-    return execute_tool("generate_video", arguments)
+    return generate_video_impl(**arguments)
 
 
 def tool_get_font_types() -> Dict[str, Any]:

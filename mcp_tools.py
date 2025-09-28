@@ -23,7 +23,6 @@ try:
     from add_subtitle_impl import add_subtitle_impl
     from add_sticker_impl import add_sticker_impl
     from add_video_keyframe_impl import add_video_keyframe_impl
-    from generate_video_impl import generate_video_impl
     from pyJianYingDraft.text_segment import TextStyleRange, Text_style, Text_border
     from util import hex_to_rgb
     CAPCUT_AVAILABLE = True
@@ -466,8 +465,6 @@ def execute_tool(tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
                 
             elif tool_name == "add_video_keyframe":
                 result = add_video_keyframe_impl(**arguments)
-            elif tool_name == "generate_video":
-                result = generate_video_impl(**arguments)
 
             else:
                 return {"success": False, "error": f"Unknown tool: {tool_name}"}
