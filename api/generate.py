@@ -84,6 +84,7 @@ def generate_video_api():
                     if video_name:
                         existing.video_name = video_name
         except Exception as e:
+            # swallow key errors or other issues caused by draft_content structure
             logger.error(f"Failed to pre-insert video task {final_task_id}: {e}")
 
         chain_result = (process_sig | generate_sig).apply_async()

@@ -4,6 +4,7 @@ Add these endpoints to your Flask application.
 """
 
 from flask import Blueprint, jsonify, request
+import json
 from postgres_draft_storage import get_postgres_storage
 from draft_cache import get_cache_stats, remove_from_cache
 import logging
@@ -137,6 +138,38 @@ def get_draft_info(draft_id):
         })
     except Exception as e:
         logger.error(f"Failed to get draft {draft_id}: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@draft_bp.route('/<draft_id>/content', methods=['GET'])
+def get_draft_content(draft_id):
+    """Fetch full draft content JSON stored in Postgres."""
+    try:
+        pg_storage = get_postgres_storage()
+        script_obj = pg_storage.get_draft(draft_id)
+
+        if script_obj is None:
+            return jsonify({
+                'success': False,
+                'error': 'Draft not found'
+            }), 404
+
+        try:
+            draft_content = json.loads(script_obj.dumps())
+        except Exception as decode_err:
+            logger.warning(f"Failed to decode draft {draft_id} to JSON object: {decode_err}")
+            draft_content = script_obj.dumps()
+
+        return jsonify({
+            'success': True,
+            'draft_id': draft_id,
+            'content': draft_content
+        })
+    except Exception as e:
+        logger.error(f"Failed to get draft content for {draft_id}: {e}")
         return jsonify({
             'success': False,
             'error': str(e)

@@ -83,7 +83,7 @@ def add_effect_impl(
         script.add_track(draft.Track_type.effect)
 
     # Add effect
-    script.add_effect(effect_enum, t_range, params=params[::-1], track_name=track_name)
+    script.add_effect(effect_enum, t_range, params=params, track_name=track_name)
 
     # Persist updated script
     update_cache(draft_id, script)

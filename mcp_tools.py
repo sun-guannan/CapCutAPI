@@ -17,7 +17,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # 导入CapCut API功能
 try:
-    from add_text_impl import add_text_impl
     from add_audio_track import add_audio_track
     from add_image_impl import add_image_impl
     from add_subtitle_impl import add_subtitle_impl
