@@ -1,4 +1,4 @@
-# 通过CapCutAPI连接AI生成的一切   [在线体验](https://www.capcutapi.top)
+![269d0657c462f13c3cfddfb158d0e646](https://github.com/user-attachments/assets/c5e8b971-3bab-4f01-985d-01dad23701e1)# 通过CapCutAPI连接AI生成的一切   [在线体验](https://www.capcutapi.top)
 
 <div align="center">
 
@@ -260,7 +260,8 @@ mcp_client.call_tool("add_text", {
 
 ## 进群交流
 
-![交流群](https://github.com/user-attachments/assets/4dbe2a0c-1a50-4fce-b0a2-48af8576dd16)
+![交流群](https://github.com/user-attachments/assets/c263b3a0-b5bc-4837-b780-e803ab6bdcd6)
+
 
 
 
