@@ -261,11 +261,9 @@ We welcome contributions of all forms\! Our iteration rules are:
 
 ## Contact Us
 
-
-**Contact**: abelchrisnic@gmail.com
 ### 🤝 Collaboration
 
-  - **Video Production**: Want to use this API for batch production of videos? I offer free consulting services to help you use this API. In return, I'll ask for the production workflow template to be **open-sourced** in the `template` directory of this project.
+  - **Video Production**: Want to use this API for batch production of videos with AIGC? 
 
   - **Join us**: Our goal is to provide a stable and reliable video editing tool that integrates well with AI-generated images, videos, and audio. If you are interested, submit a PR and I'll see it. For more in-depth involvement, the code for the MCP Editing Agent, web-based editing client, and cloud rendering modules has not been open-sourced yet.
 
