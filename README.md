@@ -261,11 +261,6 @@ We welcome contributions of all forms\! Our iteration rules are:
 
 ## Contact Us
 
-If you want to:
-
-  - Feedback on issues
-  - Feature suggestions
-  - Get latest news
 
 **Contact**: abelchrisnic@gmail.com
 ### 🤝 Collaboration
